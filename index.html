@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Atelier Mobilă — prototip v5</title>
+<style>
+:root{--bg:#f4f5f7;--panel:#fff;--ink:#17202b;--muted:#667085;--accent:#2368d8;--line:#d9dee7;--wood:#d4b58a;--wood2:#b89467;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}header{background:#17202b;color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}header h1{font-size:18px;margin:0}header small{color:#c8d0dc}.wrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;padding:12px;max-width:1400px;margin:auto}.stage,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}.stagehead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);gap:8px;flex-wrap:wrap}.stagehead strong{font-size:15px}.zoomlabel{display:inline-flex;align-items:center;justify-content:center;min-width:42px;font-size:12px;color:var(--muted);font-weight:600}.canvas{width:100%;min-height:400px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#fff,#f8fafc);touch-action:pan-y}.canvas svg{width:100%;height:auto;max-height:70vh;min-height:360px;touch-action:none;user-select:none;cursor:grab}.project-mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:#fff}.mode-button{min-height:42px}.mode-button.active{background:var(--accent);color:#fff;border-color:var(--accent)}.drawer-mode-panel{display:none;border:1px solid #b7ccf5;background:#f0f6ff;border-radius:10px;padding:11px;gap:6px}.drawer-mode-panel.visible{display:flex;flex-direction:column}.drawer-mode-panel .partlist{max-height:180px}.drawer-mode-panel .part{background:#fff}.compartment-pick{font-size:12px;padding:8px 7px;min-width:0}.compartment-pick.active{background:var(--accent);border-color:var(--accent);color:#fff}.hint{padding:9px 14px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}.stage-instruction-bar{display:flex;justify-content:flex-end;padding:6px 10px;border-top:1px solid var(--line)}.stage .hint.instruction{display:none}.stage.instructions-open .hint.instruction{display:block}.panel{padding:14px;display:flex;flex-direction:column;gap:14px}.panel h2{font-size:16px;margin:0}.pieces-heading{display:flex;flex-direction:column;align-items:flex-start;gap:0;font-size:12px!important;line-height:.82;letter-spacing:.08em}.pieces-heading span:first-child{font-size:10px;letter-spacing:.12em}.pieces-heading span:last-child{font-size:14px;letter-spacing:.04em}.section{border-bottom:1px solid var(--line);padding-bottom:13px;display:flex;flex-direction:column;gap:9px}.section h2{display:flex;align-items:center;justify-content:space-between;gap:8px;user-select:none}.instruction-toggle{flex:0 0 auto;padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:#f8fafc;color:var(--accent);font-size:11px;font-weight:600;line-height:1.2}.instruction-toggle[aria-expanded="true"]{background:#eef4ff;border-color:#b7ccf5}.instruction{display:none}.section.instructions-open .instruction{display:block}.drawer-mode-panel.instructions-open .instruction{display:block}.section:last-child{border:0;padding:0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}label{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:12px}input,select{width:100%;min-width:0;border:1px solid #cbd2dd;border-radius:8px;padding:9px;background:white;color:var(--ink);font:inherit;font-size:14px}select{color:#17202b;background-color:#fff}select option{color:#17202b;background:#fff}#doorHingeWrap{width:100%;min-width:0;flex-direction:column;align-items:stretch}#doorHingeWrap .grid2{width:100%;min-width:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#doorHingeWrap .small{display:block;width:100%;max-width:100%;white-space:normal;overflow-wrap:anywhere}#doorHingeWrap button{width:100%}button{border:1px solid #cbd2dd;border-radius:9px;padding:9px 11px;background:white;color:var(--ink);font:inherit;font-weight:600;cursor:pointer}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:active{transform:translateY(1px)}.btnrow{display:flex;gap:7px;flex-wrap:wrap}.btnrow button{flex:1}.small{font-size:12px;color:var(--muted);line-height:1.4}.partlist{display:flex;flex-direction:column;gap:6px;max-height:210px;overflow:auto}.part{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px}.part.active{border-color:var(--accent);background:#f0f6ff}.part button{padding:5px 8px;font-size:12px}.partname{flex:1;min-width:0}.partname b{display:block;font-size:13px}.partname span{font-size:11px;color:var(--muted)}.badge{font-size:11px;background:#edf2f8;border-radius:6px;padding:3px 6px}.status{padding:9px;border-radius:8px;background:#eef6ff;color:#194b91;font-size:12px;line-height:1.4}.toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink)}.toggle input{width:auto}.holetable{font-size:12px;border-collapse:collapse;width:100%}.holetable td,.holetable th{border-bottom:1px solid var(--line);padding:6px 3px;text-align:left}.holetable th{color:var(--muted);font-weight:500}.footer{padding:12px;text-align:center;color:var(--muted);font-size:11px}@media(max-width:800px){.wrap{grid-template-columns:1fr;padding:8px}.canvas{min-height:300px}.canvas svg{min-height:300px}.panel{order:2}.stage{order:1}header h1{font-size:16px}.wrap{gap:8px}}@media(min-width:801px){.panel{max-height:calc(100vh - 95px);overflow:auto}}
+.footer{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.footer .instruction{display:none;color:var(--muted);font-size:12px}.footer #footerInstruction[style*="display: block"]{display:block}
+</style></head><body>
+<header><div><h1>Atelier Mobilă</h1><small>Prototip 0.1 · proiectare simplificată</small></div><button id="exportBtn" class="primary">Exportă proiect</button></header>
+<div class="wrap"><section class="stage"><div class="stagehead"><strong id="projectTitle">Dulap nou · vedere 3D</strong><div class="btnrow"><button id="holesBtn">Arată găurile</button><button id="zoomOut" aria-label="Micșorează">−</button><span id="zoomLabel" class="zoomlabel">100%</span><button id="zoomIn" aria-label="Mărește">+</button><button id="resetView">Reîncadrează</button></div></div><div class="canvas" id="canvas"></div><div class="stage-instruction-bar"><button type="button" id="stageInstructionsBtn" class="instruction-toggle" aria-expanded="false">Instrucțiuni</button></div><div class="hint instruction" id="stageHint">Laterala dreaptă este transparentă pentru a vedea polițele încadrate în interior. Selectează și trage o poliță vertical pentru a o muta. Când fundul este „Încadrat între laterale”, îl poți selecta și trage sus/jos pentru a-l ridica, de exemplu, cu 5–10 mm. În timpul mutării vezi simultan două cote în mm: de la tavan la partea superioară a poliței și de la fund la partea inferioară a poliței. La zoom peste 100%, trage cu degetul pe o zonă liberă a desenului pentru a deplasa vederea în sus, jos sau lateral. Trage direct de o poliță pentru a-i schimba poziția. Pentru poziționare exactă, poți folosi și câmpurile numerice.</div></section>
+<aside class="panel">
+<section class="drawer-mode-panel" id="drawerModePanel" aria-live="polite">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b>Modul „Dulap cu sertare”</b><button type="button" id="drawerInstructionsBtn" class="instruction-toggle" aria-expanded="false">Instrucțiuni</button></div>
+<div class="grid2"><label>Lungime șină selectată (automat)<input id="railChosen" type="text" readonly value="—"></label><label>Tip șină<select id="railType"><option value="roller" data-clearance="12.5">Standard cu role</option><option value="ball" data-clearance="12.7">Cu bile, montaj lateral</option><option value="undermount" data-clearance="21.5">Ascunsă, montaj sub sertar</option></select></label></div>
+<div class="grid2"><label>Joc lateral pe fiecare parte (mm)<input id="drawerClearance" type="number" min="0" step="0.5" value="12.5"></label><label>Înălțime laterală cutie (mm)<input id="drawerBoxH" type="number" min="40" max="500" value="100"></label></div>
+<div class="grid2"><label>Rost între fronturi (mm)<input id="drawerGap" type="number" min="0" step="0.5" value="2"></label><label>Reper șină față de marginea inferioară a frontului (mm)<input id="railOffset" type="number" min="0" step="0.5" value="13"></label></div><label class="toggle"><input id="drawerFrontTransparent" type="checkbox" checked> Fronturi semitransparente în vederea 3D</label>
+<div class="small instruction" id="drawerInstructions">Șina este aleasă automat ca cea mai lungă din lista de test care încape în adâncimea dulapului, păstrând minimum 10 mm până la spate. Reperul de 13 mm și jocurile laterale sunt valori de test, nu reguli universale; verifică-le cu modelul exact de șină înainte de debitare.</div>
+<label>Compartiment pentru sertare<select id="drawerCompartment"></select></label>
+<div id="drawerCompartmentButtons" class="btnrow" aria-label="Alege compartimentul pentru sertar"></div>
+<div class="btnrow"><button id="addDrawer" class="primary">+ 1 sertar în compartimentul selectat</button></div><div class="btnrow"><button id="addDrawerEachCompartment">+ 1 sertar în fiecare compartiment</button></div><div class="small instruction">Mai întâi adaugă intermediarii verticali. Butonul „+ 1 sertar în compartimentul selectat” adaugă un singur sertar în compartimentul ales. Selectează alt compartiment pentru a adăuga acolo următorul sertar. Butonul separat adaugă câte un sertar în fiecare compartiment, folosind lateralele dulapului la exterior și fiecare intermediar ca sprijin între compartimente.</div>
+<div class="btnrow"><button id="removeDrawer">− Șterge ultimul</button></div>
+<div id="drawerList" class="partlist"></div><div id="drawerStatus" class="status">Adaugă un sertar pentru a începe configurarea.</div>
+<div id="drawerProps" style="display:none;flex-direction:column;gap:9px">
+<b>Setări sertar selectat</b><div class="grid2"><label>Înălțime front (mm)<input id="drawerFrontH" type="number" min="30" value="150"></label><label>Înălțime cutie (mm)<input id="drawerSelectedBoxH" type="number" min="40" value="100"></label></div>
+<label>Poziția marginii inferioare a frontului (mm)<input id="drawerZ" type="number" step="1" value="2"></label><div class="small instruction">Poți trage frontul vertical în vederea 3D sau poți introduce cota aici și apăsa „Aplică sertarul”. Frontul de jos respectă aceeași poziție ca ușile: 2 mm deasupra bazei dulapului, cu 2 mm pe laterale.</div>
+<div class="small" id="drawerCalc"></div><div class="btnrow"><button id="applyDrawer" class="primary">Aplică sertarul</button><button id="deleteDrawer">Șterge sertarul selectat</button></div>
+</div>
+</section>
+<section class="section"><h2>Dimensiuni dulap</h2><div class="grid2"><label>Lățime totală (mm)<input id="cabW" type="number" min="200" max="3000" value="800"></label><label>Înălțime (mm)<input id="cabH" type="number" min="300" max="3000" value="2000"></label><label>Adâncime (mm)<input id="cabD" type="number" min="100" max="1000" value="300"></label><label>Grosime placă (mm)<input id="thick" type="number" min="8" max="40" value="18"></label></div><button class="primary" id="applyCab">Actualizează dulapul</button><div class="grid2"><label>Montaj tavan<select id="topMode"><option value="between">Încadrat între laterale</option><option value="applied">Aplicat peste laterale</option></select></label><label>Montaj fund<select id="bottomMode"><option value="between">Încadrat între laterale</option><option value="applied">Aplicat peste laterale</option></select></label></div><div class="small"><b>Încadrat între laterale:</b> tavanul/fundul intră între cele două laterale. <b>Aplicat peste laterale:</b> panoul are lățimea totală a dulapului și acoperă capetele lateralelor; prinderea se face prin panou în laterală (la tavan de sus în jos, la fund de jos în sus). Poți alege separat fiecare montaj: de exemplu, tavan aplicat și fund încadrat sau invers. Modelul ajustează automat poziția și lungimea lateralelor.</div></section>
+<section class="section"><h2>Adaugă piesă</h2><div class="btnrow"><button id="addShelf" class="primary">+ Poliță</button><button id="addDivider">+ Despărțitor central</button><button id="addDoor">+ O ușă</button><button id="addDoubleDoors">+ Două uși</button><button id="addTripleDoors">+ Trei uși</button><button id="addPfl">+ PFL spate</button></div><div class="small">PFL-ul este adăugat doar ca piesă în listă și în export; nu este desenat în model. Dimensiuni automate: lățime dulap − 2 mm, înălțime totală dulap − 2 mm − deplasarea fundului în sus, grosime implicită 3 mm.</div><div class="small">Butoanele de uși permit alegerea a una, două sau trei uși. Dacă numărul ușilor este egal cu numărul compartimentelor, rosturile se aliniază la centrele intermediarilor, iar fiecare ușă acoperă un compartiment. Dacă alegi alt număr, ușile se distribuie egal pe fața dulapului. Joc: 2 mm la marginile exterioare și 3 mm între uși. Apasă din nou butonul cu același număr pentru a elimina ușile.</div><div class="small">Cu mai mulți intermediari verticali, fiecare poliță este împărțită automat în câte un segment pentru fiecare compartiment.</div><div class="btnrow"><button id="equalShelves">Distribuie polițele egal</button><button id="repeatShelves">Interval 300 mm</button></div><label>Număr polițe pentru distribuire<input id="shelfN" type="number" min="1" max="20" value="4"></label><div class="btnrow"><button id="equalDividers">Distribuie intermediarii verticali egal</button></div><div class="small instruction">Butonul distribuie egal intermediarii verticali deja existenți, fără să adauge sau să șteargă piese. Pozițiile se calculează astfel încât lățimile libere ale compartimentelor să fie egale.</div></section>
+<section class="section"><h2>Piese</h2><div id="partList" class="partlist"></div></section>
+<section class="section"><h2>Proprietăți piesă selectată</h2><div id="noSelection" class="small instruction">Selectează o piesă din listă sau din desen.</div><div id="properties" style="display:none;flex-direction:column;gap:9px"><div class="status" id="selectedInfo"></div><label id="bottomDisplacementWrap" style="display:none">Deplasare fund față de poziția de bază (mm)<input id="bottomDisplacement" type="number" step="1" value="0"></label><label id="dividerCenterWrap" style="display:none">Poziția centrului despărțitorului față de stânga (mm)<input id="dividerCenter" type="number" step="1" value="400"></label><div class="grid2"><label>Poziție Z față de baza dulapului (mm)<input id="posZ" type="number"></label><label>Poziție laterală X față de stânga (mm)<input id="posX" type="number"></label><label>Lungime (mm)<input id="partL" type="number"></label><label>Adâncime (mm)<input id="partD" type="number"></label></div><div class="small"><b>Poziție X:</b> distanța de la marginea exterioară stângă a dulapului până la marginea stângă a piesei. De aceea, un fund sau un tavan încadrat între laterale poate avea X = 18 mm, egal cu grosimea plăcii. <b>Poziție Z:</b> înălțimea marginii inferioare a piesei față de baza dulapului; de exemplu, Z = 68 mm înseamnă că piesa începe la 68 mm deasupra bazei. Pentru fundul mobil, poți introduce fie poziția Z absolută, fie deplasarea față de poziția inițială; aplicarea modificărilor actualizează ambele valori.</div><div id="shelfSupportWrap" style="display:none;border:1px solid var(--line);border-radius:9px;padding:10px;gap:7px"><label class="toggle"><input id="shelfMetalSupports" type="checkbox"> Suport poliță</label><div class="small">Activat: nu se mai marchează găuri de îmbinare în capetele poliței. Se fac 4 găuri Ø5 mm în total, câte 2 în fiecare laterală: una la 50 mm de față și una la 50 mm de spate. Centrele găurilor sunt la 2 mm sub fața inferioară a poliței. Dezactivează opțiunea pentru găurile obișnuite de îmbinare.</div></div><div id="shelfBatchReductionWrap" style="display:none;border:1px solid var(--line);border-radius:9px;padding:10px;gap:7px"><label class="toggle"><input id="applyShelfReductionsAll" type="checkbox"> Aplică reducerile la toate polițele (PO)</label><div class="small">Bifează pentru ca valorile „Reducere lungime” și „Reducere adâncime”, când apeși „Aplică modificările”, să se aplice tuturor polițelor PO din dulap, inclusiv celor din stânga și din dreapta despărțitorului. Poziția și înălțimea celorlalte polițe nu se modifică.</div></div><div id="doorHingeWrap" style="display:none;flex-direction:column;align-items:stretch;width:100%;min-width:0;border:1px solid var(--line);border-radius:9px;padding:10px;gap:8px"><b style="font-size:13px">Balamale ușă</b><div class="grid2"><label>Marginea balamalelor<select id="hingeEdge"><option value="left">Stânga</option><option value="right">Dreapta</option><option value="top">Sus</option><option value="bottom">Jos</option></select></label><label>Număr balamale<input id="hingeCount" type="number" min="1" max="8" step="1" value="2"></label></div><div class="small">Centrul fiecărei găuri este la 21 mm de marginea aleasă. Cu o singură balama, aceasta se centrează cât mai mult posibil. Cu două sau mai multe, prima și ultima sunt nominal la 100 mm de capete. Balamalele intermediare se distribuie cât mai uniform și se repoziționează automat ca să păstreze minimum 80 mm față de suprafețele polițelor. Cercurile sunt doar reprezentarea vizuală a locașului; nu se afișează cota Ø35 mm.</div><button id="applyHinges" class="primary">Aplică pozițiile balamalelor</button></div><div class="grid2"><label>Reducere lungime (mm)<input id="redL" type="number" value="0"></label><label>Reducere adâncime (mm)<input id="redD" type="number" value="0"></label></div><label>Muchie de la care se reduce adâncimea<select id="redEdge"><option value="front">Din față — păstrează spatele</option><option value="back">Din spate — păstrează fața</option><option value="both">Din ambele capete</option></select></label><div class="small">Alege „Din față” dacă vrei ca muchia din spate să rămână pe loc; alege „Din spate” dacă trebuie să rămână pe loc muchia din față. „Ambele capete” distribuie reducerea între față și spate.</div><div class="btnrow"><button id="applyPart" class="primary">Aplică modificările</button><button id="deletePart">Șterge piesa</button></div><div class="small">Dimensiunile finale sunt calculate din dimensiunile de bază minus reduceri. Reducerea dimensională și poziția piesei sunt setări distincte.</div></div></section>
+<section class="section"><h2>Tipărire / fișe de atelier</h2><label>Ce dorești să tipărești?<select id="printMode"><option value="dimensions">Doar lista dimensiunilor pieselor</option><option value="selectedDrilling">Doar găurirea piesei selectate</option><option value="allDrilling">Găurirea tuturor pieselor, fișă separată pentru fiecare</option><option value="both">Dimensiunile pieselor + găurirea tuturor pieselor</option></select></label><div class="small">Lista dimensiunilor se tipărește separat de fișele de găurire. La alegerea tuturor pieselor, fiecare piesă primește o secțiune proprie, cu tabelul de marcaje disponibil în proiect. Selectează piesa din listă înainte de a tipări doar găurirea ei.</div><div class="btnrow"><button id="printBtn" class="primary">Pregătește tipărirea</button><button id="exportCutlistBtn">Exportă lista de debitare pentru Excel (.csv)</button></div><div class="small">Lista de debitare exportată în CSV are coloanele: Cod, Piesă, Lungime, Lățime/înălțime și Grosime. Fiecare piesă apare pe rând separat; fișierul este separat cu punct și virgulă pentru deschidere în Excel.</div></section>
+<section class="section"><h2>Marcaje de găurire</h2><label class="toggle"><input id="showHoles" type="checkbox"> Afișează centrele găurilor pe model</label><div class="grid2"><label>Prima distanță de la fiecare muchie (mm)<input id="holeOffset1" type="number" min="1" max="500" step="1" value="50"></label><label>A doua distanță de la fiecare muchie (mm)<input id="holeOffset2" type="number" min="1" max="500" step="1" value="100"></label></div><div class="grid2"><label>Distanța găurii de cant față de exteriorul lateralei (mm)<input id="sideEdgeOffset" type="number" min="1" max="20" step="1" value="9"></label><div class="small" style="align-self:center">Implicit: jumătate din placa de 18 mm, adică 9 mm. Pentru tavan/fund aplicat, gaura intră prin cantul lateral.</div></div><button id="applyHoleOffsets" class="primary">Aplică distanțele găurilor</button><div class="small">Distanțele se măsoară pe adâncimea piesei, de la față și de la spate, la ambele capete stânga/dreapta. De exemplu, 35 și 75 generează marcaje la 35 și 75 mm de fiecare muchie. Dacă piesa este prea puțin adâncă, marcajele suprapuse se afișează o singură dată. Verifică să existe material suficient și ca distanțele să fie potrivite pentru șurubul, diblul sau șablonul folosit.</div><div class="small">Marcajele sunt liniuțe negre, nu buline: cele verticale indică găurirea prin tavan/fund aplicat, iar cele orizontale indică punctele de prindere la capetele polițelor. Sunt repere vizuale orientative; verifică pozițiile reale înainte de găurire.</div><div id="holeInfo" class="status">Selectează o laterală, poliță, tavan sau fund pentru a vedea coordonatele găurilor.</div><button id="holeReport">Generează lista marcajelor</button><div id="holeReportOut"></div></section>
+</aside></div><div class="footer"><button type="button" id="footerInstructionsBtn" class="instruction-toggle" aria-expanded="false">Instrucțiuni</button><span id="footerInstruction" class="instruction">Prototip de lucru · Nu folosi cotele de găurire la producție fără verificare fizică.</span></div>
+<script>
+const $=id=>document.getElementById(id);let cfg={w:800,h:2000,d:300,t:18,topMode:"between",bottomMode:"between"};let drawers=[],selectedDrawerId=null,nextDrawerId=1,drawerCompartmentSelected=0,drawerCfg={clearance:12.5,boxH:100,gap:3,railOffset:13,railType:"roller"},railLengths=[250,300,350,400,450,500,550,600];let parts=[],selected=null,showHoles=false,holeOffsets=[50,100],sideEdgeOffset=9,nextId=1,dragState=null,panState=null,viewZoom=1,viewPanX=0,viewPanY=0;
+function init(){
+ parts=[
+ {id:nextId++,type:'side',name:'Laterală stângă',x:0,z:0,l:cfg.h,d:cfg.d,baseL:cfg.h,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true},
+ {id:nextId++,type:'side',name:'Laterală dreaptă',x:cfg.w-cfg.t,z:0,l:cfg.h,d:cfg.d,baseL:cfg.h,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true},
+ {id:nextId++,type:'top',name:'Tavan',x:cfg.t,z:cfg.h,l:cfg.w-2*cfg.t,d:cfg.d,baseL:cfg.w-2*cfg.t,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true},
+ {id:nextId++,type:'bottom',name:'Fund',x:cfg.t,z:cfg.t,baseZ:cfg.t,l:cfg.w-2*cfg.t,d:cfg.d,baseL:cfg.w-2*cfg.t,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true}
+ ];syncStructure();const requestedShelves=clamp(Math.round(Number($('shelfN')?.value)||4),1,20);$('shelfN').value=requestedShelves;const low=cfg.t,high=cfg.h-cfg.t;for(let i=0;i<requestedShelves;i++)addShelf(false,Math.round(low+(high-low)*(i+1)/(requestedShelves+1)));selected=parts.find(p=>p.type==='shelf')?.id;render()
+}
+function syncStructure(){
+ const left=parts.find(p=>p.type==='side'&&p.name==='Laterală stângă'),right=parts.find(p=>p.type==='side'&&p.name==='Laterală dreaptă'),top=parts.find(p=>p.type==='top'),bottom=parts.find(p=>p.type==='bottom');
+ const topApplied=cfg.topMode==='applied',bottomApplied=cfg.bottomMode==='applied';
+ for(const divider of parts.filter(p=>p.type==='divider')){divider.x=clamp(Number.isFinite(divider.x)?divider.x:Math.round((cfg.w-cfg.t)/2),cfg.t,cfg.w-2*cfg.t);divider.d=cfg.d;divider.baseD=cfg.d;}
+ for(const side of [left,right])if(side){side.z=bottomApplied?cfg.t:0;side.l=Math.max(1,cfg.h-(topApplied?cfg.t:0)-(bottomApplied?cfg.t:0));side.baseL=side.l;side.x=side===left?0:cfg.w-cfg.t;side.baseD=cfg.d;}
+ if(top){top.x=topApplied?0:cfg.t;top.z=cfg.h;top.l=topApplied?cfg.w:cfg.w-2*cfg.t;top.baseL=top.l;top.d=cfg.d;top.baseD=cfg.d;}
+ if(bottom){const oldBase=bottom.baseZ??cfg.t;const displacement=bottom.z-oldBase;bottom.x=cfg.bottomMode==='applied'?0:cfg.t;bottom.z=clamp(cfg.t+displacement,cfg.t,cfg.h-cfg.t);bottom.baseZ=cfg.t;bottom.l=cfg.bottomMode==='applied'?cfg.w:cfg.w-2*cfg.t;bottom.baseL=bottom.l;bottom.d=cfg.d;bottom.baseD=cfg.d;}
+ for(const divider of parts.filter(p=>p.type==='divider')){
+  // Intermediarii verticali rămân ancorați la baza interioară a dulapului.
+  // Nu îi ridicăm odată cu fundul mobil folosit ca suport pentru sertare.
+  divider.z=cfg.t;
+  divider.l=Math.max(1,(cfg.h-cfg.t)-divider.z);
+  divider.baseL=divider.l;
+ }
+ $('topMode').value=cfg.topMode;$('bottomMode').value=cfg.bottomMode;
+}
+function setStructureModes(){cfg.topMode=$('topMode').value;cfg.bottomMode=$('bottomMode').value;syncStructure();render()}
+function drawerCapZ(compartment=null){if(!drawers.length)return null;/* FIU: fiecare coloană de sertare are propria placă, centrată pe muchia superioară a frontului cel mai de sus din acea coloană. */const stack=compartment===null?drawers:drawers.filter(d=>Number(d.compartment||0)===Number(compartment));if(!stack.length)return null;return Math.max(...stack.map(d=>drawerFrontZ(d)+Number(d.frontH||0)))+10.5}
+function drawerCapNeeded(){return drawers.length>0&&parts.some(p=>['shelf','door','divider'].includes(p.type))}
+function upperCompartmentBase(){const caps=parts.filter(p=>p.type==='drawerCap');if(caps.length)return Math.max(...caps.map(p=>p.z));if(drawers.length&&projectMode==='drawers')return drawerCapZ();const bottom=parts.find(p=>p.type==='bottom');return bottom?bottom.z:cfg.t}
+function doorCompartmentIndex(p){
+ const bounds=shelfCompartments();if(!p||!bounds.length)return 0;
+ const doors=parts.filter(q=>q.type==='door').sort((a,b)=>(a.doorIndex??0)-(b.doorIndex??0));
+ if(doors.length===bounds.length&&Number.isInteger(Number(p.doorIndex)))return clamp(Number(p.doorIndex),0,bounds.length-1);
+ const center=doorX(p)+doorWidth(p)/2;let best=0,bestDist=Infinity;
+ bounds.forEach((b,i)=>{const mid=(b.x+b.end)/2,dist=Math.abs(center-mid);if(dist<bestDist){bestDist=dist;best=i}});return best;
+}
+function doorBottomZ(p=null){
+ const baseBottom=()=>{const bottom=parts.find(q=>q.type==='bottom');return (bottom?bottom.z-cfg.t:0)+2};
+ if(p){const comp=doorCompartmentIndex(p);const cap=parts.find(q=>q.type==='drawerCap'&&Number(q.compartment)===comp);if(cap)return cap.z-7.5;if(drawers.length&&projectMode==='drawers'){const z=drawerCapZ(comp);if(z!==null)return z-7.5;}return baseBottom();}
+ const caps=parts.filter(q=>q.type==='drawerCap');if(caps.length)return Math.max(...caps.map(q=>q.z))-7.5;if(drawers.length&&projectMode==='drawers')return drawerCapZ()-7.5;return baseBottom();
+}
+function doorHeight(p=null){return Math.max(1,cfg.h-2-doorBottomZ(p))}
+function doorCenterX(){const d=parts.find(p=>p.type==='divider');return d?d.x+cfg.t/2:cfg.w/2}
+function doorX(p){return Number.isFinite(p?.x)?p.x:2}
+function doorWidth(p){return Math.max(1,Number.isFinite(p?.l)?p.l:cfg.w-4)}
+function recalculateDoorGeometry(){
+ const doors=parts.filter(p=>p.type==='door').sort((a,b)=>(a.doorIndex??0)-(b.doorIndex??0));if(!doors.length)return;
+ const n=doors.length,dividers=parts.filter(p=>p.type==='divider').sort((a,b)=>a.x-b.x),gap=3,outer=2;let spans=[];
+ if(n===dividers.length+1){
+  const centers=dividers.map(d=>d.x+cfg.t/2);
+  for(let i=0;i<n;i++){const left=i===0?outer:centers[i-1]+gap/2;const right=i===n-1?cfg.w-outer:centers[i]-gap/2;spans.push({x:left,l:Math.max(1,right-left)});}
+ }else{
+  const usable=cfg.w-2*outer-gap*(n-1),w=Math.max(1,usable/n);
+  for(let i=0;i<n;i++)spans.push({x:outer+i*(w+gap),l:w});
+ }
+ doors.forEach((p,i)=>{p.doorIndex=i;p.x=spans[i].x;p.l=spans[i].l;p.baseL=p.l;p.z=doorBottomZ(p);p.d=cfg.t;p.baseD=cfg.t;p.name=n===1?'Ușă 1':n===2?(i===0?'Ușă stânga':'Ușă dreapta'):`Ușă ${i+1}`;if(n===1)p.hingeEdge='left';else if(i===0)p.hingeEdge='left';else if(i===n-1)p.hingeEdge='right';else p.hingeEdge=i%2?'right':'left';});
+}
+function hingeCount(p){return clamp(Math.round(Number(p.hingeCount)||2),1,8)}
+function hingePositions(p){
+ const count=hingeCount(p),edge=p.hingeEdge||'left',vertical=edge==='left'||edge==='right',length=vertical?doorHeight(p):doorWidth(p),base=vertical?doorBottomZ(p):2;
+ const min=80,max=Math.floor(length-80);let targets=[];
+ if(count===1)targets=[length/2];else for(let i=0;i<count;i++)targets.push(100+(length-200)*i/(count-1));
+ if(!vertical)return targets.map(v=>({along:base+v,edge,vertical,clearance:false}));
+ // Un locaș trebuie să rămână la minimum 80 mm de suprafețele poliței;
+ // coordonatele sunt convertite din Z-ul dulapului în distanța de la baza ușii.
+ const forbidden=[];
+ for(const sh of parts.filter(q=>q.type==='shelf')){
+   const a=sh.z-base-80, b=sh.z+cfg.t-base+80;
+   forbidden.push([a,b]);
+ }
+ const valid=[];
+ for(let z=Math.ceil(min);z<=max;z++)if(!forbidden.some(([a,b])=>z>=a&&z<=b))valid.push(z);
+ if(!valid.length)return [];
+ // Căutăm poziții cât mai apropiate de reperele nominale (100 mm la capete,
+ // restul distribuite egal), păstrând minimum 80 mm între centrele balamalelor.
+ // Programare dinamică pentru a nu sacrifica accidental distanța de siguranță.
+ if(count<=valid.length && max-min>=80*(count-1)){
+   const costs=Array(count).fill(null).map(()=>Array(valid.length).fill(Infinity));
+   const prev=Array(count).fill(null).map(()=>Array(valid.length).fill(-1));
+   for(let j=0;j<valid.length;j++)costs[0][j]=(valid[j]-targets[0])**2;
+   for(let k=1;k<count;k++){
+     let ptr=0,bestCost=Infinity,bestIdx=-1;
+     for(let j=0;j<valid.length;j++){
+       while(ptr<j&&valid[ptr]<=valid[j]-80){if(costs[k-1][ptr]<bestCost){bestCost=costs[k-1][ptr];bestIdx=ptr;}ptr++;}
+       if(bestIdx>=0){costs[k][j]=bestCost+(valid[j]-targets[k])**2;prev[k][j]=bestIdx;}
+     }
+   }
+   let end=-1,best=Infinity;for(let j=0;j<valid.length;j++)if(costs[count-1][j]<best){best=costs[count-1][j];end=j;}
+   if(end>=0&&Number.isFinite(best)){const chosen=Array(count);for(let k=count-1;k>=0;k--){chosen[k]=valid[end];end=prev[k][end];}return chosen.map(v=>({along:base+v,edge,vertical,clearance:false}));}
+ }
+ // Dacă înălțimea și polițele nu permit toate balamalele, afișăm numai
+ // pozițiile care respectă distanțele minime; nu plasăm locașuri în zona interzisă.
+ const chosen=[];
+ for(const target of targets){let best=null,score=Infinity;for(const z of valid){if(chosen.some(v=>Math.abs(v-z)<80))continue;const sc=Math.abs(z-target);if(sc<score){best=z;score=sc;}}if(best!==null)chosen.push(best);}
+ chosen.sort((a,b)=>a-b);return chosen.map(v=>({along:base+v,edge,vertical,clearance:false}));
+}
+function applyHingeSettings(){const p=partById(selected);if(!p||p.type!=='door')return;p.hingeEdge=$('hingeEdge').value;p.hingeCount=clamp(Math.round(+$('hingeCount').value||2),1,8);$('hingeCount').value=p.hingeCount;render();holeReport()}
+function displayName(p){
+ if(!p)return '';
+ if(p.type==='side')return p.name==='Laterală stângă'?'LS':'LD';
+ if(p.type==='top')return 'TV';
+ if(p.type==='bottom')return 'FD';
+ if(p.type==='shelf'){
+  const m=p.name.match(/Poliță\s+(\d+)/i),n=m?m[1]:'1';
+  if(/stânga/i.test(p.name))return `PO ${n} ST`;
+  if(/dreapta/i.test(p.name))return `PO ${n} DR`;
+  return `PO ${n}`;
+ }
+ if(p.type==='divider'){const m=p.name.match(/(\d+)/);return `IV ${m?m[1]:'1'}`;}
+ if(p.type==='drawerDivider'){const m=p.name.match(/(\d+)/);return `IV-S ${m?m[1]:'1'}`;}
+ if(p.type==='door'){
+  const doors=parts.filter(q=>q.type==='door');
+  if(doors.length>1)return p.doorSide==='left'?'US':'UD';
+  return 'U';
+ }
+ if(p.type==='pfl')return 'SP';
+ if(p.type==='socle')return 'SO';
+ if(p.type==='drawerCap')return /^FI\s+\d+/i.test(p.name||'')?p.name:`FI ${Math.max(1,Number(p.compartment||0)+1)}`;
+ return p.name||'';
+}
+function displayType(p){return ({side:'LATERALĂ',top:'TAVAN',bottom:'FUND',shelf:'POLIȚĂ',divider:'INTERMEDIAR VERTICAL',drawerDivider:'INTERMEDIAR VERTICAL SERTARE',door:'UȘĂ',pfl:'SPĂTAR',socle:'SOCLU',drawerCap:'FUND INTERMEDIAR PESTE SERTARE'})[p.type]||p.type.toUpperCase();}
+function dim(p,axis){return Math.max(1,(axis==='l'?p.baseL-p.redL:p.baseD-p.redD))}function partById(id){return parts.find(p=>p.id===Number(id))}function shelfBaseName(name){return name.replace(/ — (stânga|dreapta|segment \d+)$/i,'')}function shelfCompartments(){const dividers=parts.filter(p=>p.type==='divider').sort((a,b)=>a.x-b.x);const bounds=[{x:cfg.t,end:dividers.length?dividers[0].x:cfg.w-cfg.t}];for(let i=0;i<dividers.length;i++){const d=dividers[i];if(i>0)bounds.push({x:dividers[i-1].x+cfg.t,end:d.x});}if(dividers.length)bounds.push({x:dividers[dividers.length-1].x+cfg.t,end:cfg.w-cfg.t});return bounds.filter(b=>b.end-b.x>1)}function addShelf(doRender=true,z){const n=shelfGroups().length+1;const level=z??(drawers.length?Math.round(upperCompartmentBase()+(cfg.h-cfg.t-upperCompartmentBase())*.5):Math.round(cfg.h*.45));const compartments=shelfCompartments();let firstId=null;if(compartments.length===1){const p={id:nextId++,type:'shelf',name:'Poliță '+n,x:compartments[0].x,z:level,l:compartments[0].end-compartments[0].x,d:cfg.d,baseL:compartments[0].end-compartments[0].x,baseD:cfg.d,redL:0,redD:0,edge:'front',supportMode:'metal',fixed:false};parts.push(p);firstId=p.id;}else{compartments.forEach((c,i)=>{const l=c.end-c.x;const p={id:nextId++,type:'shelf',name:'Poliță '+n+' — segment '+(i+1),x:c.x,z:level,l,d:cfg.d,baseL:l,baseD:cfg.d,redL:0,redD:0,edge:'front',supportMode:'metal',fixed:false};parts.push(p);if(firstId===null)firstId=p.id;});}selected=firstId;if(doRender)render()}
+function pflHeight(){const bottom=parts.find(q=>q.type==='bottom');const displacement=bottom?bottom.z-(bottom.baseZ??cfg.t):0;return Math.max(1,cfg.h-2-Math.max(0,displacement))}
+function updatePflDimensions(){const p=parts.find(q=>q.type==='pfl');if(!p)return;p.x=1;p.z=pflHeight();p.l=cfg.w-2;p.d=3;p.baseL=p.l;p.baseD=p.d;p.redL=0;p.redD=0}
+function addPfl(){const existing=parts.find(p=>p.type==='pfl');if(existing){parts=parts.filter(p=>p.type!=='pfl');selected=parts.find(p=>p.type==='bottom')?.id??parts[0]?.id??null;}else{const p={id:nextId++,type:'pfl',name:'PFL spate',x:1,z:pflHeight(),l:cfg.w-2,d:3,baseL:cfg.w-2,baseD:3,redL:0,redD:0,edge:'back',fixed:false};parts.push(p);selected=p.id;}render()}
+function addDoors(count){
+ const existing=parts.filter(p=>p.type==='door');
+ if(existing.length===count){parts=parts.filter(p=>p.type!=='door');const bottom=parts.find(p=>p.type==='bottom');selected=bottom?.id??parts.find(p=>p.type==='shelf')?.id??parts[0]?.id??null;render();return;}
+ parts=parts.filter(p=>p.type!=='door');
+ for(let i=0;i<count;i++){const p={id:nextId++,type:'door',name:`Ușă ${i+1}`,doorIndex:i,x:2,z:doorBottomZ(),l:Math.max(1,(cfg.w-4-3*(count-1))/count),d:cfg.t,baseL:Math.max(1,(cfg.w-4-3*(count-1))/count),baseD:cfg.t,redL:0,redD:0,edge:'front',fixed:false,hingeEdge:i===count-1&&count>1?'right':'left',hingeCount:2};parts.push(p);}
+ recalculateDoorGeometry();syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();selected=parts.find(p=>p.type==='door')?.id??selected;render();
+}
+function addDoor(){addDoors(1)}
+function addDoubleDoors(){addDoors(2)}
+function addTripleDoors(){addDoors(3)}
+function dividerXBounds(divider,startPositions=null){
+ const t=cfg.t,edgeMin=t,edgeMax=cfg.w-2*t;
+ const others=parts.filter(q=>q.type==='divider'&&q.id!==divider.id).map(q=>({id:q.id,x:startPositions?.find(v=>v.id===q.id)?.x??q.x})).sort((a,b)=>a.x-b.x);
+ const ownX=startPositions?.find(v=>v.id===divider.id)?.x??divider.x;
+ const left=others.filter(q=>q.x<ownX).at(-1),right=others.find(q=>q.x>ownX);
+ return {min:left?left.x+t+2:edgeMin,max:right?right.x-t-2:edgeMax};
+}
+function resplitShelvesByDividers(){
+ const oldShelves=parts.filter(q=>q.type==='shelf');if(!oldShelves.length)return;
+ const groups=new Map();
+ for(const sh of oldShelves){const key=shelfBaseName(sh.name);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(sh);}
+ const usedIds=new Set();parts=parts.filter(q=>q.type!=='shelf');
+ const compartments=shelfCompartments();
+ for(const [baseName,oldPieces] of groups){
+  const sample=oldPieces[0];
+  compartments.forEach((c,i)=>{
+   const old=oldPieces.find(q=>!usedIds.has(q.id)&&Math.abs(q.x-c.x)<1);
+   const id=old?old.id:nextId++;if(old)usedIds.add(old.id);
+   const length=Math.max(1,c.end-c.x);
+   parts.push({...sample,id,type:'shelf',name:compartments.length===1?baseName:baseName+' — segment '+(i+1),x:c.x,z:sample.z,l:length,baseL:length,d:cfg.d,baseD:cfg.d,redL:0,redD:sample.redD||0,edge:sample.edge||'front',supportMode:sample.supportMode||'metal',fixed:false});
+  });
+ }
+ if(drawerCapNeeded())distributeUpperShelves();
+}
+function addDivider(){
+ const dividers=parts.filter(p=>p.type==='divider');
+ const centers=dividers.map(p=>p.x+cfg.t/2).sort((a,b)=>a-b);
+ let center;
+ if(!centers.length) center=cfg.w/2;
+ else {
+  // Plasează noul despărțitor în cel mai mare spațiu liber, fără să-l suprapună pe cel existent.
+  const bounds=[cfg.t+cfg.t/2,...centers,cfg.w-cfg.t-cfg.t/2];
+  let bestGap=-1,bestCenter=cfg.w/2;
+  for(let i=0;i<bounds.length-1;i++){const gap=bounds[i+1]-bounds[i];if(gap>bestGap){bestGap=gap;bestCenter=(bounds[i]+bounds[i+1])/2;}}
+  center=bestCenter;
+ }
+ center=clamp(Math.round(center),cfg.t+cfg.t/2,cfg.w-cfg.t-cfg.t/2);
+ const index=dividers.length+1,x=center-cfg.t/2;
+ const dividerZ=(parts.find(q=>q.type==='bottom')?.z??cfg.t),dividerL=Math.max(1,cfg.h-cfg.t-dividerZ);
+ const p={id:nextId++,type:'divider',name:'Despărțitor '+index,x,z:dividerZ,l:dividerL,d:cfg.d,baseL:dividerL,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:false};
+ parts.push(p);
+ // Reîmparte fiecare nivel de poliță în toate compartimentele delimitate de laterale și intermediari.
+ const existingShelves=parts.filter(q=>q.type==='shelf');
+ const shelfMap=new Map();
+ for(const sh of existingShelves){const key=shelfBaseName(sh.name);if(!shelfMap.has(key))shelfMap.set(key,[]);shelfMap.get(key).push(sh);}
+ parts=parts.filter(q=>q.type!=='shelf');
+ const compartments=shelfCompartments();
+ for(const [baseName,oldPieces] of shelfMap){
+  const sample=oldPieces[0];
+  compartments.forEach((c,i)=>{
+   const length=Math.max(1,c.end-c.x);
+   const old=oldPieces.find(q=>Math.abs(q.x-c.x)<1)||oldPieces[i];
+   const piece={...(old||sample),id:old?old.id:nextId++,type:'shelf',name:compartments.length===1?baseName:baseName+' — segment '+(i+1),x:c.x,z:sample.z,l:length,baseL:length,d:cfg.d,baseD:cfg.d,redL:0,redD:sample.redD||0,edge:sample.edge||'front',supportMode:sample.supportMode||'metal',fixed:false};
+   parts.push(piece);
+  });
+ }
+ if(parts.some(q=>q.type==='shelf'))selected=parts.find(q=>q.type==='shelf').id;
+ if(drawerCapNeeded())distributeUpperShelves();selected=p.id;render()
+}
+function distributeDividersEqually(){
+ const dividers=parts.filter(p=>p.type==='divider').sort((a,b)=>a.x-b.x);
+ if(!dividers.length){alert('Adaugă mai întâi cel puțin un intermediar vertical.');return;}
+ const clearWidth=(cfg.w-2*cfg.t-dividers.length*cfg.t)/(dividers.length+1);
+ if(clearWidth<30){alert('Nu se pot distribui intermediarii în mod egal: compartimentele ar deveni prea înguste.');return;}
+ dividers.forEach((p,i)=>{p.x=cfg.t+(i+1)*clearWidth+i*cfg.t;p.fixed=false;});
+ resplitShelvesByDividers();
+ if(drawerCapNeeded())syncDrawerCap();
+ selected=dividers[0].id;
+ render();
+}
+function shelfGroups(){const groups=new Map();for(const sh of parts.filter(p=>p.type==='shelf')){const key=shelfBaseName(sh.name);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(sh)}return [...groups.values()].sort((a,b)=>Math.min(...a.map(p=>p.z))-Math.min(...b.map(p=>p.z)))}
+// Mutarea unei polițe împinge în lanț polițele cu care intră în contact,
+// fără intersectări. Perechile stânga/dreapta ale aceleiași polițe rămân la aceeași cotă.
+function moveShelfWithCollisions(selectedPart, requestedZ, startPositions){
+ const keyOf=p=>shelfBaseName(p.name);
+ const byId=new Map(startPositions.map(v=>[v.id,v]));
+ const groups=new Map();
+ for(const sh of parts.filter(p=>p.type==='shelf')){
+  const start=byId.get(sh.id);if(!start)continue;
+  const key=keyOf(sh);if(!groups.has(key))groups.set(key,{key,z:start.z,parts:[]});
+  const g=groups.get(key);g.z=Math.min(g.z,start.z);g.parts.push(sh);
+ }
+ const list=[...groups.values()].sort((a,b)=>a.z-b.z);
+ const selectedKey=keyOf(selectedPart),idx=list.findIndex(g=>g.key===selectedKey);if(idx<0)return;
+ const step=cfg.t+2;
+ const bottom=parts.find(p=>p.type==='bottom');
+ const cap=parts.find(p=>p.type==='drawerCap');
+ const top=parts.find(p=>p.type==='top');
+ const minZ=Math.max(cfg.t+cfg.t,(bottom?bottom.z+cfg.t+2:cfg.t+cfg.t),(cap?cap.z+cfg.t+2:0));
+ const maxZ=Math.min(cfg.h-2*cfg.t,(top?top.z-cfg.t:cfg.h-2*cfg.t));
+ const starts=list.map(g=>g.z),direction=requestedZ>=starts[idx]?1:-1;
+ function simulate(candidate){
+  const z=starts.slice();z[idx]=candidate;
+  if(direction>0){for(let i=idx+1;i<z.length;i++)z[i]=Math.max(z[i],z[i-1]+step)}
+  else{for(let i=idx-1;i>=0;i--)z[i]=Math.min(z[i],z[i+1]-step)}
+  if(z.some(v=>v<minZ-0.01||v>maxZ+0.01))return null;
+  // Confirmă că nicio pereche de polițe nu se intersectează.
+  for(let i=1;i<z.length;i++)if(z[i]-z[i-1]<step-0.01)return null;
+  return z;
+ }
+ let lo=minZ,hi=maxZ,best=simulate(starts[idx]);
+ if(direction>0){lo=starts[idx];hi=Math.min(maxZ,requestedZ);for(let n=0;n<28;n++){const mid=(lo+hi)/2;if(simulate(mid)){lo=mid;best=simulate(mid)}else hi=mid;}}
+ else{lo=Math.max(minZ,requestedZ);hi=starts[idx];for(let n=0;n<28;n++){const mid=(lo+hi)/2;if(simulate(mid)){hi=mid;best=simulate(mid)}else lo=mid;}}
+ if(!best)best=simulate(starts[idx]);if(!best)return;
+ list.forEach((g,i)=>g.parts.forEach(sh=>sh.z=best[i]));
+}
+// Când fundul mobil urcă, împinge polițele în sus în lanț, păstrând distanța dintre ele.
+function moveBottomWithShelfCollisions(bottomPart, requestedZ, startPositions){
+ const startBottom=Number(dragState?.startZ??bottomPart.z);
+ const top=parts.find(p=>p.type==='top');
+ const cap=parts.find(p=>p.type==='drawerCap');
+ const step=cfg.t+2;
+ const keyOf=p=>shelfBaseName(p.name);
+ const startById=new Map(startPositions.map(v=>[v.id,v]));
+ const groups=new Map();
+ for(const sh of parts.filter(p=>p.type==='shelf')){
+  const v=startById.get(sh.id);if(!v)continue;
+  const key=keyOf(sh);
+  if(!groups.has(key))groups.set(key,{key,z:v.z,parts:[]});
+  const g=groups.get(key);g.z=Math.min(g.z,v.z);g.parts.push(sh);
+ }
+ const list=[...groups.values()].sort((a,b)=>a.z-b.z);
+ // La coborâre, polițele rămân pe loc. La urcare, fundul împinge polițele care îi blochează drumul.
+ if(requestedZ<=startBottom){bottomPart.z=requestedZ;return;}
+ const maxShelfZ=top?top.z-cfg.t:cfg.h-2*cfg.t;
+ function simulate(bottomZ){
+  const zs=list.map(g=>g.z);
+  const minShelfZ=Math.max(cfg.t*2,bottomZ+cfg.t+2,cap?cap.z+cfg.t+2:0);
+  for(let i=0;i<zs.length;i++){
+   if(zs[i]<minShelfZ)zs[i]=minShelfZ;
+   if(i>0&&zs[i]<zs[i-1]+step)zs[i]=zs[i-1]+step;
+  }
+  if(zs.some(z=>z>maxShelfZ+0.01))return null;
+  return zs;
+ }
+ let low=startBottom,high=Math.min(requestedZ,cfg.h-cfg.t);
+ let best=simulate(startBottom);
+ for(let n=0;n<30;n++){
+  const mid=(low+high)/2,trial=simulate(mid);
+  if(trial){low=mid;best=trial;}else high=mid;
+ }
+ bottomPart.z=Math.round(low);
+ best=simulate(bottomPart.z)||best;
+ if(best)list.forEach((g,i)=>g.parts.forEach(sh=>sh.z=Math.round(best[i])));
+}
+function setShelfCount(requested,redistribute=true){const n=clamp(Math.round(Number(requested)||1),1,20);$('shelfN').value=n;/* Rebuild shelves from the requested count, rather than relying on names/grouping of existing parts. This guarantees that the physical model and parts list match the requested count. */parts=parts.filter(p=>p.type!=='shelf');const low=drawers.length?upperCompartmentBase():cfg.t,high=cfg.h-cfg.t;for(let i=0;i<n;i++){const z=redistribute?Math.round(low+(high-low)*(i+1)/(n+1)):undefined;addShelf(false,z)}const groups=shelfGroups();if(redistribute){const lo=drawers.length?upperCompartmentBase():cfg.t,hi=cfg.h-cfg.t;groups.forEach((g,i)=>g.forEach(p=>p.z=Math.round(lo+(hi-lo)*(i+1)/(groups.length+1))))}return groups.length}
+function applyCab(){const rawShelves=$('shelfN').value;const requestedShelves=clamp(Math.round(Number(rawShelves)||1),1,20);cfg.w=clamp(+$('cabW').value,200,3000);cfg.h=clamp(+$('cabH').value,300,3000);cfg.d=clamp(+$('cabD').value,100,1000);cfg.t=clamp(+$('thick').value,8,40);$('cabW').value=cfg.w;$('cabH').value=cfg.h;$('cabD').value=cfg.d;$('thick').value=cfg.t;$('shelfN').value=requestedShelves;init();setShelfCount(requestedShelves,true);selected=parts.find(p=>p.type==='shelf')?.id??selected;render();const count=shelfGroups().length;const status=$('shelfN').closest('label');if(status){let msg=status.querySelector('.shelf-count-status');if(!msg){msg=document.createElement('div');msg.className='small shelf-count-status';status.appendChild(msg)}msg.textContent='Actualizat: '+count+' '+(count===1?'poliță':'polițe')+' în model și în lista de piese.'}}
+function clamp(n,a,b){return Math.min(b,Math.max(a,Number.isFinite(n)?n:a))}
+function updateAutoSocle(){
+ const bottom=parts.find(p=>p.type==='bottom');
+ const displacement=bottom?Math.max(0,Math.round(bottom.z-(bottom.baseZ??cfg.t))):0;
+ let socle=parts.find(p=>p.type==='socle');
+ if(displacement<=0){if(socle){parts=parts.filter(p=>p.type!=='socle');if(selected===socle.id)selected=bottom?.id??parts[0]?.id??null;}return;}
+ const data={type:'socle',name:'Soclu automat',x:cfg.t,z:bottom.baseZ??cfg.t,l:Math.max(1,cfg.w-2*cfg.t),h:displacement,d:cfg.t,baseL:Math.max(1,cfg.w-2*cfg.t),baseD:cfg.t,redL:0,redD:0,edge:'front',fixed:true,auto:true};
+ if(!socle){socle={id:nextId++,...data};parts.push(socle);}else Object.assign(socle,data);
+}
+
+function railLength(){const max=cfg.d-10;return [...railLengths].reverse().find(n=>n<=max)||0}
+function drawerCompartmentBounds(d){
+ const bounds=shelfCompartments();
+ const index=clamp(Math.round(Number(d?.compartment)||0),0,Math.max(0,bounds.length-1));
+ return bounds[index]||{x:cfg.t,end:cfg.w-cfg.t};
+}
+function drawerOpening(d){const b=drawerCompartmentBounds(d);return Math.max(0,b.end-b.x)}
+function drawerWidth(d){return Math.max(0,drawerOpening(d)-2*drawerCfg.clearance)}
+function drawerInnerWidth(d){return Math.max(0,drawerWidth(d)-2*cfg.t)}
+function drawerFrontWidth(d){return Math.max(1,drawerOpening(d)-4)}
+function drawerFrontX(d){return drawerCompartmentBounds(d).x+2}
+function drawerBottomReference(){const bottom=parts.find(p=>p.type==='bottom');return bottom?Math.max(2,Math.round(bottom.z-cfg.t+2)):2}
+function drawerFrontZ(d){return Number.isFinite(Number(d.z))?Number(d.z):drawerBottomReference()}
+function drawerRailZ(d){const nominal=drawerFrontZ(d)+drawerCfg.railOffset;return Math.max(drawerBottomReference()+5,nominal)}
+function drawerBoxBottomZ(d){return drawerRailZ(d)+5}
+function drawerSlideClearance(){return Math.max(0,drawerCfg.clearance)}
+function drawerSlideLabel(){return ({roller:'standard cu role',ball:'cu bile, montaj lateral',undermount:'ascunsă, montaj sub sertar'})[drawerCfg.railType]||'standard cu role'}
+function drawerValidation(){
+ const rail=railLength(),availableTop=cfg.h-cfg.t,issues=[];
+ if(!rail)issues.push('Avertisment: nicio lungime standard de șină nu încape cu rezerva de 10 mm la spate.');
+ const groups=new Map();drawers.forEach(d=>{const k=Number(d.compartment)||0;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(d)});
+ for(const [comp,group] of groups){group.sort((a,b)=>drawerFrontZ(a)-drawerFrontZ(b));let prevTop=drawerBottomReference();
+  group.forEach((d,i)=>{const z=drawerFrontZ(d),fh=Number(d.frontH)||0,bh=Number(d.boxH)||0;
+   if(fh<=0||bh<=0)issues.push(`Sertar ${d.id}: înălțime invalidă.`);
+   if(z<0||z+fh>availableTop)issues.push(`Sertar ${d.id}: frontul iese din spațiul disponibil.`);
+   if(i>0){const prev=group[i-1],gap=z-(drawerFrontZ(prev)+Number(prev.frontH||0));if(gap<drawerCfg.gap-0.01)issues.push(`Compartiment ${Number(comp)+1}: rost insuficient între sertare (${gap.toFixed(1)} mm).`);}
+   if(z<drawerBottomReference()-0.01&&i===0)issues.push(`Sertar ${d.id}: frontul nu poate coborî sub baza stabilită (rost de 2 mm).`);
+   if(bh>availableTop-z)issues.push(`Sertar ${d.id}: cutia depășește spațiul vertical disponibil.`);
+   if(drawerWidth(d)<=0)issues.push(`Sertar ${d.id}: lățime nulă; verifică jocul lateral și lățimea compartimentului.`);
+   prevTop=z+fh;
+  });
+ }
+ return [...new Set(issues)];
+}
+function recalcDrawerChain(start=0,compartment=null){
+ const groups=new Map();drawers.forEach(d=>{if(compartment!==null&&Number(d.compartment)!==Number(compartment))return;const k=Number(d.compartment)||0;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(d)});
+ for(const group of groups.values()){group.sort((a,b)=>drawerFrontZ(a)-drawerFrontZ(b));for(let i=1;i<group.length;i++){const prev=group[i-1];group[i].z=drawerFrontZ(prev)+Number(prev.frontH||0)+drawerCfg.gap;}}
+}
+function addDrawerToCompartment(compartment){
+ const existing=drawers.filter(d=>Number(d.compartment||0)===Number(compartment)).sort((a,b)=>drawerFrontZ(a)-drawerFrontZ(b));
+ const z=existing.length?drawerFrontZ(existing[existing.length-1])+Number(existing[existing.length-1].frontH||0)+drawerCfg.gap:drawerBottomReference();
+ const d={id:nextDrawerId++,frontH:150,boxH:drawerCfg.boxH,z,compartment:Number(compartment)};
+ drawers.push(d);return d.id;
+}
+function addDrawerSet(count=1){
+ // Sursa de adevăr este selectorul vizibil în interfață; starea memorată poate rămâne în urmă după atingerea modelului 3D.
+ const selectedValue=Number($('drawerCompartment').value);
+ const compartment=clamp(Number.isFinite(selectedValue)?selectedValue:drawerCompartmentSelected,0,Math.max(0,shelfCompartments().length-1));
+ drawerCompartmentSelected=compartment;
+ let lastId=null;for(let i=0;i<count;i++)lastId=addDrawerToCompartment(compartment);
+ selectedDrawerId=lastId;syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();render();
+}
+function addDrawer(){addDrawerSet(1)}
+function addDrawerEachCompartment(){
+ const bounds=shelfCompartments();let lastId=null;
+ bounds.forEach((_,i)=>{lastId=addDrawerToCompartment(i)});
+ if(lastId!==null){selectedDrawerId=lastId;drawerCompartmentSelected=Math.max(0,bounds.length-1);$('drawerCompartment').value=String(drawerCompartmentSelected);}
+ syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();render();
+}
+function renderDrawerUI(){
+ const panel=$('drawerModePanel');if(!panel)return;
+ const rail=railLength();$('railChosen').value=rail?rail+' mm':'Nicio șină potrivită';
+ drawerCfg.clearance=Math.max(0,Number($('drawerClearance').value)||0);
+ drawerCfg.boxH=Math.max(40,Number($('drawerBoxH').value)||100);
+ drawerCfg.gap=Math.max(0,Number($('drawerGap').value)||0);
+ drawerCfg.railOffset=Math.max(0,Number($('railOffset').value)||0);
+ const compSelect=$('drawerCompartment'),bounds=shelfCompartments();
+ const rawComp=compSelect.value;const parsedComp=rawComp!==''?Number(rawComp):Number(drawerCompartmentSelected);
+ drawerCompartmentSelected=clamp(Number.isFinite(parsedComp)?parsedComp:0,0,Math.max(0,bounds.length-1));
+ compSelect.innerHTML=bounds.map((b,i)=>`<option value="${i}">Compartiment ${i+1} · ${Math.round(b.end-b.x)} mm lățime</option>`).join('');compSelect.value=String(drawerCompartmentSelected);
+ const compButtons=$('drawerCompartmentButtons');if(compButtons){compButtons.innerHTML=bounds.map((b,i)=>`<button type="button" class="compartment-pick${i===drawerCompartmentSelected?' active':''}" data-compartment-pick="${i}">Compartiment ${i+1}</button>`).join('');compButtons.querySelectorAll('[data-compartment-pick]').forEach(btn=>{btn.onclick=()=>{const idx=Number(btn.getAttribute('data-compartment-pick'));drawerCompartmentSelected=clamp(idx,0,Math.max(0,shelfCompartments().length-1));compSelect.value=String(drawerCompartmentSelected);renderDrawerUI();};});}
+ const list=$('drawerList');list.innerHTML='';
+ drawers.forEach((d,i)=>{const el=document.createElement('div');el.className='part'+(d.id===selectedDrawerId?' active':'');el.innerHTML=`<div class="partname"><b>Sertar ${i+1} · compartiment ${Number(d.compartment||0)+1}</b><span>Front ${Math.round(d.frontH)} × ${Math.round(drawerFrontWidth(d))} mm · Z ${Math.round(drawerFrontZ(d))} mm</span></div><span class="badge">${Math.round(d.boxH)} mm cutie</span>`;el.onclick=()=>{selectedDrawerId=d.id;drawerCompartmentSelected=Number(d.compartment)||0;compSelect.value=String(drawerCompartmentSelected);renderDrawerUI()};list.appendChild(el)});
+ const d=drawers.find(x=>x.id===selectedDrawerId);$('drawerProps').style.display=d?'flex':'none';
+ if(d){$('drawerFrontH').value=d.frontH;$('drawerSelectedBoxH').value=d.boxH;$('drawerZ').value=Math.round(drawerFrontZ(d));
+ const w=Math.round(drawerWidth(d)),inner=Math.round(drawerInnerWidth(d)),r=rail;
+ $('drawerCalc').textContent=`Compartiment ${Number(d.compartment||0)+1}. Șină: ${r||'—'} mm; cutie: ${r||'—'} × ${w} mm (lungime × lățime exterioară); dubluri față/spate: ${inner} mm; PFL: ${Math.max(0,(r||0)-2)} × ${Math.max(0,w-2)} mm. LSS/LDS: ${r||'—'} × ${Math.round(d.boxH)} mm. Jocurile sunt setate pentru fiecare compartiment.`;}
+ const issues=drawerValidation();$('drawerStatus').textContent=issues.length?issues.join(' '):drawers.length?`OK preliminar: ${drawers.length} sertar(e) în ${new Set(drawers.map(d=>Number(d.compartment)||0)).size} compartiment(e). Șină ${drawerSlideLabel()} ${rail||'indisponibilă'} mm. Lățimile sunt calculate separat pentru fiecare compartiment. Jocurile sunt valori de test; verifică fișa producătorului.`:'Adaugă un sertar pentru a începe configurarea.';
+}
+function applySelectedDrawer(){
+ const d=drawers.find(x=>x.id===selectedDrawerId);if(!d)return;
+ d.frontH=Math.max(30,Number($('drawerFrontH').value)||30);d.boxH=Math.max(40,Number($('drawerSelectedBoxH').value)||40);
+ d.z=clamp(Number.isFinite(Number($('drawerZ').value))?Number($('drawerZ').value):drawerBottomReference(),drawerBottomReference(),cfg.h-cfg.t-d.frontH);
+ const idx=drawers.indexOf(d);recalcDrawerChain(idx+1);syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();render();
+}
+function printDrawerDimensionsHtml(){
+ const rail=railLength();
+ let rows=[];
+ drawers.forEach((d,i)=>{const n=i+1,L=rail||0,H=Math.round(d.boxH),F=Math.round(d.frontH),w=Math.round(drawerWidth(d)),inner=Math.round(drawerInnerWidth(d));
+ rows.push([`S${n} LSS`,'Laterală stânga sertar',L,H,cfg.t]);
+ rows.push([`S${n} LDS`,'Laterală dreapta sertar',L,H,cfg.t]);
+ rows.push([`S${n} DFS`,'Dublură față sertar',inner,H,cfg.t]);
+ rows.push([`S${n} DSS`,'Dublură spate sertar',inner,H,cfg.t]);
+ rows.push([`S${n} PFL`,'Fund sertar PFL',Math.max(0,L-2),Math.max(0,w-2),3]);
+ rows.push([`S${n} Front`,'Front aplicat în compartiment',Math.round(drawerFrontWidth(d)),F,cfg.t]);
+ });
+ const body=rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+ const issues=drawerValidation();
+ return `<h1>Atelier Mobilă — Dimensiuni sertare</h1><p>Dulap ${cfg.w} × ${cfg.h} × ${cfg.d} mm; placă ${cfg.t} mm. Șină ${esc(drawerSlideLabel())}: ${rail||'nicio lungime din lista de test nu încape'} mm. Joc lateral: ${drawerCfg.clearance} mm/parte (valoare de test, verifică producătorul).</p>${issues.length?`<p class="note"><b>Avertismente:</b> ${esc(issues.join(' '))}</p>`:''}<table><thead><tr><th>Cod</th><th>Piesă</th><th>Lungime (mm)</th><th>Lățime/înălțime (mm)</th><th>Grosime (mm)</th></tr></thead><tbody>${body}</tbody></table><p class="note">LSS/LDs au lungimea șinei; lateralele se suprapun peste muchiile DFS/DSS, iar DFS/DSS intră între laterale. PFL: lungime șină − 2 mm × lățime exterioară cutie − 2 mm, prins cu șuruburi, fără caneluri. Frontul este separat și aplicat peste lateralele și fundul dulapului, cu rost de 2 mm la marginile laterale și la reperul inferior. Nu se generează scheme de găurire pentru sertare. Jocurile și cotele șinelor sunt valori de test până la selectarea unui model concret de producător.</p>`;
+}
+
+function syncDrawerDividers(){
+ const bottom=parts.find(p=>p.type==='bottom');
+ const upper=parts.filter(p=>p.type==='divider').sort((a,b)=>a.x-b.x);
+ const shouldCreate=drawers.length>0&&bottom&&bottom.z>cfg.t+1&&upper.length>0;
+ let lower=parts.filter(p=>p.type==='drawerDivider');
+ if(!shouldCreate){parts=parts.filter(p=>p.type!=='drawerDivider');return;}
+ upper.forEach((divider,i)=>{
+  let piece=lower.find(p=>p.parentDividerId===divider.id);
+  if(!piece){piece={id:nextId++,type:'drawerDivider',name:`Intermediar sertare ${i+1}`,parentDividerId:divider.id,x:divider.x,z:cfg.t,l:bottom.z-cfg.t,d:cfg.d,baseL:bottom.z-cfg.t,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true,auto:true};parts.push(piece);lower.push(piece);}
+  Object.assign(piece,{name:`Intermediar sertare ${i+1}`,x:divider.x,z:cfg.t,l:Math.max(1,bottom.z-cfg.t),baseL:Math.max(1,bottom.z-cfg.t),d:cfg.d,baseD:cfg.d,redL:0,redD:0,fixed:true,auto:true});
+ });
+ const validIds=new Set(upper.map(p=>p.id));parts=parts.filter(p=>p.type!=='drawerDivider'||validIds.has(p.parentDividerId));
+}
+function syncDrawerCap(){
+ const existing=parts.filter(p=>p.type==='drawerCap');
+ if(!drawerCapNeeded()||!drawers.length){if(existing.length){parts=parts.filter(p=>p.type!=='drawerCap');if(existing.some(p=>p.id===selected))selected=parts.find(p=>p.type==='shelf')?.id??parts[0]?.id??null;}return;}
+ const compartments=[...new Set(drawers.map(d=>Number(d.compartment)||0))].sort((a,b)=>a-b);
+ const bounds=shelfCompartments();
+ compartments.forEach((comp,capIndex)=>{
+  const stack=drawers.filter(d=>(Number(d.compartment)||0)===comp);if(!stack.length)return;
+  const b=bounds[comp]||{x:cfg.t,end:cfg.w-cfg.t};
+  let cap=existing.find(p=>Number(p.compartment)===comp);
+  if(!cap){cap={id:nextId++,type:'drawerCap',name:`FI ${capIndex+1}`,compartment:comp,x:b.x,z:drawerCapZ(comp),l:b.end-b.x,d:cfg.d,baseL:b.end-b.x,baseD:cfg.d,redL:0,redD:0,edge:'front',fixed:true,auto:true};parts.push(cap);existing.push(cap);}
+  Object.assign(cap,{name:`FI ${capIndex+1}`,compartment:comp,x:b.x,z:drawerCapZ(comp),l:Math.max(1,b.end-b.x),baseL:Math.max(1,b.end-b.x),d:cfg.d,baseD:cfg.d,redL:0,redD:0,fixed:true,auto:true});
+ });
+ const valid=new Set(compartments);parts=parts.filter(p=>p.type!=='drawerCap'||valid.has(Number(p.compartment)));
+}
+function distributeUpperShelves(){const shelves=parts.filter(p=>p.type==='shelf');if(!shelves.length)return;const keyOf=p=>shelfBaseName(p.name);const groups=new Map();for(const sh of shelves){const k=keyOf(sh);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(sh)}const high=Math.max(cfg.t*2,cfg.h-2*cfg.t),low=Math.min(Math.max(cfg.t*2,upperCompartmentBase()+cfg.t+2),high),levels=[...groups.values()].sort((a,b)=>Math.min(...a.map(p=>p.z))-Math.min(...b.map(p=>p.z)));levels.forEach((g,i)=>g.forEach(p=>p.z=Math.round(low+(high-low)*(i+1)/(levels.length+1))));}
+function render(){updateAutoSocle();recalculateDoorGeometry();syncDrawerCap();const dividerBaseZ=parts.find(p=>p.type==='bottom')?.z??cfg.t;for(const divider of parts.filter(p=>p.type==='divider')){divider.z=dividerBaseZ;divider.l=Math.max(1,cfg.h-cfg.t-divider.z);divider.baseL=divider.l;}syncDrawerDividers();updatePflDimensions();renderList();renderProps();renderSvg();renderHoleInfo();$('projectTitle').textContent=`Dulap ${cfg.w} × ${cfg.h} × ${cfg.d} mm`;$('showHoles').checked=showHoles;$('holesBtn').textContent=showHoles?'Ascunde găurile':'Arată găurile';$('addDoor').textContent=parts.filter(p=>p.type==='door').length===1?'− O ușă':'+ O ușă';$('addDoubleDoors').textContent=parts.filter(p=>p.type==='door').length===2?'− Două uși':'+ Două uși';$('addTripleDoors').textContent=parts.filter(p=>p.type==='door').length===3?'− Trei uși':'+ Trei uși';$('addPfl').textContent=parts.some(p=>p.type==='pfl')?'− PFL spate':'+ PFL spate';if(typeof renderDrawerUI==='function')renderDrawerUI()}
+function renderList(){$('partList').innerHTML='';for(const p of parts){let d=document.createElement('div');d.className='part'+(p.id===selected?' active':'');d.innerHTML=`<div class="partname"><b>${esc(displayName(p))}</b><span>${displayType(p)} · ${p.type==='door'?Math.round(doorHeight(p))+' × '+Math.round(doorWidth(p)):p.type==='pfl'?Math.round(p.l)+' × '+Math.round(p.z)+' × '+Math.round(p.d):p.type==='socle'?Math.round(p.l)+' × '+Math.round(p.h)+' × '+Math.round(p.d):Math.round(dim(p,'l'))+' × '+Math.round(dim(p,'d'))} mm</span></div><span class="badge">${p.fixed?'Bază':'Editabilă'}</span>`;d.onclick=()=>{selected=p.id;render()};$('partList').appendChild(d)}}
+function renderProps(){let p=partById(selected);const movableBottom=!!p&&p.type==='bottom'&&cfg.bottomMode==='between';const editable=!!p&&!p.fixed;const isDoor=!!p&&p.type==='door';const isPfl=!!p&&p.type==='pfl';const isDivider=!!p&&['divider','drawerDivider'].includes(p.type);$('noSelection').style.display=p?'none':'block';$('properties').style.display=p?'flex':'none';if(!p)return;$('selectedInfo').textContent=`${displayName(p)} · ${p.type==='socle'?'panou vertical automat · lungime '+Math.round(p.l)+' mm · înălțime '+Math.round(p.h)+' mm · grosime '+Math.round(p.d)+' mm':p.type==='shelf'?'Poliță':p.type==='divider'?'Despărțitor vertical':p.type==='bottom'?'Fund':p.type==='door'?'Ușă':p.type==='pfl'?'PFL spate': 'Piesă structurală'}${isDoor?' · înălțime calculată automat: '+Math.round(doorHeight(p))+' mm · joc superior 2 mm · joc inferior 2 mm':''}${p.type==='shelf'?' · tavan: '+Math.round((cfg.h-(cfg.topMode==='applied'?cfg.t:2*cfg.t))-p.z)+' mm · fund: '+Math.round(Math.max(0,p.z-2*cfg.t))+' mm':''}${movableBottom?' · deplasare față de poziția de bază: '+(p.z-p.baseZ>=0?'+':'')+Math.round(p.z-p.baseZ)+' mm':''}${p.fixed&&!movableBottom?' · dimensiuni structurale':''}`;$('posZ').value=Math.round(isDoor?doorBottomZ(p):p.z);$('bottomDisplacement').value=Math.round(p.z-(p.baseZ??cfg.t));$('bottomDisplacementWrap').style.display=movableBottom?'flex':'none';$('dividerCenterWrap').style.display=isDivider?'flex':'none';if(isDivider)$('dividerCenter').value=Math.round(p.x+cfg.t/2);$('posX').value=Math.round(isDoor?doorX(p):p.x);$('partL').value=Math.round(isDoor?doorWidth(p):isPfl?p.l:dim(p,'l'));$('partD').value=Math.round(dim(p,'d'));if(isPfl)$('selectedInfo').textContent=`SP · piesă de calcul, nu este desenată în model · lățime ${Math.round(p.l)} mm · înălțime ${Math.round(p.z)} mm · grosime ${Math.round(p.d)} mm; dimensiunile se actualizează automat după modificarea dulapului sau a poziției fundului. Înălțimea scade cu aceeași valoare cu care ridici fundul.`;$('posZ').parentElement.firstChild.textContent=isDoor?'Poziție Z (calculată)':'Poziție Z față de baza dulapului (mm)';$('partL').parentElement.firstChild.textContent=isDoor?'Lățime ușă (mm)':'Lungime (mm)';$('partD').parentElement.firstChild.textContent=isDoor?'Grosime ușă (mm)':'Adâncime (mm)';$('redL').value=p.redL;$('redD').value=p.redD;$('redEdge').value=p.edge;$('shelfSupportWrap').style.display=p.type==='shelf'?'flex':'none';$('shelfBatchReductionWrap').style.display=p.type==='shelf'?'flex':'none';$('shelfMetalSupports').checked=p.type==='shelf'&&p.supportMode==='metal';$('doorHingeWrap').style.display=isDoor?'flex':'none';if(isDoor){$('hingeEdge').value=p.hingeEdge||'left';$('hingeCount').value=hingeCount(p)}$('posZ').disabled=isDoor||isPfl||isDivider||!(editable||movableBottom);$('posX').disabled=isDoor||isPfl||isDivider||!editable;$('partL').disabled=isDoor||isPfl||isDivider||!editable;$('partD').disabled=isPfl||isDivider||!editable;$('redL').disabled=isDoor||isDivider||!editable;$('redD').disabled=isDivider||!editable;$('redEdge').disabled=isDivider||!editable;$('deletePart').disabled=!editable}
+function applyPart(){let p=partById(selected);if(!p)return;const isDoor=p.type==='door';const isDivider=['divider','drawerDivider'].includes(p.type);const movableBottom=p.type==='bottom'&&cfg.bottomMode==='between';if(p.fixed&&!movableBottom)return;if(isDoor){p.x=doorX(p);p.baseL=doorWidth(p);p.l=p.baseL;p.redL=0;p.redD=clamp(p.baseD-clamp(+$('partD').value,1,p.baseD),0,Math.max(0,p.baseD-1));$('redL').value=0;$('redD').value=p.redD;render();return}if(isDivider){const center=+$('dividerCenter').value;const bounds=dividerXBounds(p);const minX=Math.min(bounds.min,bounds.max),maxX=Math.max(bounds.min,bounds.max);p.x=clamp(center-cfg.t/2,minX,maxX);p.z=parts.find(q=>q.type==='bottom')?.z??cfg.t;p.l=Math.max(1,cfg.h-cfg.t-p.z);p.baseL=p.l;p.d=cfg.d;p.baseD=cfg.d;resplitShelvesByDividers();render();return}if(movableBottom){const base=p.baseZ??cfg.t;const oldZ=p.z;const requestedZ=Number($('posZ').value);const requestedDisplacement=Number($('bottomDisplacement').value);const currentDisplacement=p.z-base;const zChanged=Number.isFinite(requestedZ)&&Math.round(requestedZ)!==Math.round(p.z);const displacementChanged=Number.isFinite(requestedDisplacement)&&Math.round(requestedDisplacement)!==Math.round(currentDisplacement);if(zChanged&&!displacementChanged){p.z=clamp(requestedZ,cfg.t,cfg.h-cfg.t);$('bottomDisplacement').value=Math.round(p.z-base)}else{p.z=clamp(base+(Number.isFinite(requestedDisplacement)?requestedDisplacement:currentDisplacement),cfg.t,cfg.h-cfg.t);$('posZ').value=Math.round(p.z)}let delta=p.z-oldZ;if(delta&&drawers.length){const lowest=Math.min(...drawers.map(d=>d.z));const highest=Math.max(...drawers.map(d=>d.z+Number(d.frontH||0)));const maxUp=Math.max(0,cfg.h-cfg.t-9-highest);const maxDown=Math.max(0,Math.min(oldZ-base,lowest-2));delta=clamp(delta,-maxDown,maxUp);p.z=oldZ+delta;drawers.forEach(d=>d.z=Number(d.z)+delta);recalcDrawerChain(0);syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();}render();return}p.z=clamp(+$('posZ').value,0,cfg.h);p.x=clamp(+$('posX').value,0,cfg.w);p.edge=$('redEdge').value;const currentRedL=Number(p.redL)||0,currentRedD=Number(p.redD)||0,currentDimL=dim(p,'l'),currentDimD=dim(p,'d');const requestedRedL=Number($('redL').value),requestedRedD=Number($('redD').value),requestedDimL=Number($('partL').value),requestedDimD=Number($('partD').value);const redLChanged=Number.isFinite(requestedRedL)&&Math.round(requestedRedL)!==Math.round(currentRedL);const redDChanged=Number.isFinite(requestedRedD)&&Math.round(requestedRedD)!==Math.round(currentRedD);const dimLChanged=Number.isFinite(requestedDimL)&&Math.round(requestedDimL)!==Math.round(currentDimL);const dimDChanged=Number.isFinite(requestedDimD)&&Math.round(requestedDimD)!==Math.round(currentDimD);p.redL=redLChanged?clamp(requestedRedL,0,Math.max(0,p.baseL-1)):dimLChanged?clamp(p.baseL-clamp(requestedDimL,1,p.baseL),0,Math.max(0,p.baseL-1)):currentRedL;p.redD=redDChanged?clamp(requestedRedD,0,Math.max(0,p.baseD-1)):dimDChanged?clamp(p.baseD-clamp(requestedDimD,1,p.baseD),0,Math.max(0,p.baseD-1)):currentRedD;if(p.type==='shelf'&&$('applyShelfReductionsAll').checked){const commonRedL=p.redL,commonRedD=p.redD,commonEdge=p.edge;for(const sh of parts.filter(q=>q.type==='shelf')){sh.redL=clamp(commonRedL,0,Math.max(0,(Number(sh.baseL)||Number(sh.l)||1)-1));sh.redD=clamp(commonRedD,0,Math.max(0,(Number(sh.baseD)||Number(sh.d)||1)-1));sh.edge=commonEdge;}}$('redL').value=p.redL;$('redD').value=p.redD;render()}
+function deletePart(){let p=partById(selected);if(!p||p.fixed)return;parts=parts.filter(x=>x.id!==p.id);selected=parts.find(x=>x.type==='shelf')?.id||parts[0]?.id;render()}
+function renderSvg(){let W=600,H=490,scale=Math.min(330/cfg.h,260/cfg.w,1),sx=cfg.w*scale,sy=cfg.h*scale,sd=cfg.d*scale*.52,ox=(W-sx-sd)/2+sd*.45,oy=(H-sy-sd)/2+20;const X=x=>ox+x*scale,Y=z=>oy+(cfg.h-z)*scale,DX=d=>d*scale*.52;let vbW=W/viewZoom,vbH=H/viewZoom,vbX=(W-vbW)/2+viewPanX,vbY=(H-vbH)/2+viewPanY;let svg=`<svg viewBox="${vbX} ${vbY} ${vbW} ${vbH}" role="img" aria-label="Model 3D dulap mărit ${Math.round(viewZoom*100)} la sută"><defs><filter id="shadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity=".13"/></filter></defs>`;
+// carcass silhouette
+svg+=`<polygon points="${X(0)},${Y(cfg.h)} ${X(cfg.w)},${Y(cfg.h)} ${X(cfg.w)+sd},${Y(cfg.h)-sd*.58} ${X(0)+sd},${Y(cfg.h)-sd*.58}" fill="#ead9bf" stroke="#8f7657" stroke-width="1.4"/>`;
+svg+=`<polygon points="${X(cfg.w)},${Y(cfg.h)} ${X(cfg.w)},${Y(0)} ${X(cfg.w)+sd},${Y(0)-sd*.58} ${X(cfg.w)+sd},${Y(cfg.h)-sd*.58}" fill="#b9956c" stroke="#8f7657" stroke-width="1.4"/>`;
+svg+=`<polygon points="${X(0)},${Y(0)} ${X(cfg.w)},${Y(0)} ${X(cfg.w)+sd},${Y(0)-sd*.58} ${X(0)+sd},${Y(0)-sd*.58}" fill="#dfc39d" stroke="#8f7657" stroke-width="1.4"/>`;
+const internals=[...parts.filter(p=>p.type==='drawerDivider'),...parts.filter(p=>p.type==='divider'),...parts.filter(p=>p.type==='shelf'),...parts.filter(p=>p.type==='drawerCap')];const sides=parts.filter(p=>p.type==='side');const leftSides=sides.filter(p=>p.name==='Laterală stângă');const rightSides=sides.filter(p=>p.name==='Laterală dreaptă');const bottomPanels=parts.filter(p=>p.type==='bottom');const topPanels=parts.filter(p=>p.type==='top');for(const p of [...leftSides,...internals,...bottomPanels,...rightSides,...topPanels]){let sel=p.id===selected;let x=X(p.x),z=Y(p.z),l=dim(p,'l')*scale,d=dim(p,'d'),dep=DX(d),t=cfg.t*scale;let fill=sel?'#8fb7f1':p.type==='side'?'#c5a57d':['divider','drawerDivider'].includes(p.type)?'#cbb08a':p.type==='drawerCap'?'#b89a73':'#ddc39e';let stroke=sel?'#1457b8':'#856a4b';if(p.type==='shelf'||p.type==='top'||p.type==='bottom'||p.type==='drawerCap'){let xx=X(p.x),yy=Y(p.z),ww=Math.max(2,l),hh=Math.max(3,t);let points=`${xx},${yy} ${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+dep},${yy-dep*.58}`;const translucent=p.type==='shelf'||p.type==='bottom'||p.type==='drawerCap';const panelOpacity=translucent?'.32':'1';svg+=`<polygon data-part="${p.id}" points="${points}" fill="${fill}" fill-opacity="${panelOpacity}" stroke="${stroke}" stroke-width="${sel?2.3:1.2}"/>`;svg+=`<polygon data-part="${p.id}" points="${xx},${yy} ${xx+ww},${yy} ${xx+ww},${yy+hh} ${xx},${yy+hh}" fill="${fill}" fill-opacity="${panelOpacity}" stroke="${stroke}" stroke-width="${sel?2.3:1.2}"/>`;svg+=`<polygon data-part="${p.id}" points="${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+ww+dep},${yy-dep*.58+hh} ${xx+ww},${yy+hh}" fill="#b18d62" fill-opacity="${panelOpacity}" stroke="${stroke}" stroke-width="1"/>`;
+}else if(p.type==='side'){let xx=X(p.x),yy=Y(p.z+p.l),ww=t,hh=p.l*scale;const transparentSide=p.name==='Laterală dreaptă';const sideOpacity=transparentSide?'.28':'1';svg+=`<polygon data-part="${p.id}" points="${xx},${yy} ${xx+ww},${yy} ${xx+ww},${yy+hh} ${xx},${yy+hh}" fill="${fill}" fill-opacity="${sideOpacity}" stroke="${stroke}" stroke-opacity="${transparentSide?'.8':'1'}" stroke-width="${sel?2:1}"/>`;svg+=`<polygon data-part="${p.id}" points="${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+ww+dep},${yy+hh-dep*.58} ${xx+ww},${yy+hh}" fill="#ad8a60" fill-opacity="${sideOpacity}" stroke="${stroke}" stroke-opacity="${transparentSide?'.8':'1'}" stroke-width="1"/>`;
+}else if(p.type==='divider'||p.type==='drawerDivider'){let xx=X(p.x),yy=Y(p.z+p.l),ww=Math.max(2,t),hh=p.l*scale;const sideX=xx+ww+dep,sideY=yy-dep*.58;svg+=`<polygon data-part="${p.id}" points="${xx},${yy} ${xx+ww},${yy} ${xx+ww},${yy+hh} ${xx},${yy+hh}" fill="${fill}" fill-opacity=".34" stroke="${stroke}" stroke-width="${sel?2.3:1.2}"/>`;svg+=`<polygon data-part="${p.id}" points="${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+ww+dep},${yy+hh-dep*.58} ${xx+ww},${yy+hh}" fill="#b18d62" fill-opacity=".34" stroke="${stroke}" stroke-width="${sel?2:1}"/>`;svg+=`<polygon data-part="${p.id}" points="${xx},${yy} ${xx+ww},${yy} ${xx+ww+dep},${sideY} ${xx+dep},${sideY}" fill="#dfc39d" fill-opacity=".34" stroke="${stroke}" stroke-width="${sel?2:1}"/>`;
+}}
+// Sertare în 3D: cutia și șinele se desenează înaintea frontului, astfel încât
+// transparența frontului să permită inspectarea laturilor, dublurilor și PFL-ului.
+if(projectMode==='drawers'){
+ const fronts=[...drawers].sort((a,b)=>drawerFrontZ(a)-drawerFrontZ(b));
+ const railType=$('railType').value,frontTransparent=$('drawerFrontTransparent').checked;
+ for(let i=0;i<fronts.length;i++){
+  const d=fronts[i],z=drawerFrontZ(d),fh=Number(d.frontH||0),bh=Number(d.boxH||0),r=railLength(),w=drawerWidth(d),inner=drawerInnerWidth(d),sel=d.id===selectedDrawerId;
+  const bounds=drawerCompartmentBounds(d),x=bounds.x+drawerCfg.clearance,boxZ=drawerBoxBottomZ(d),sideW=cfg.t,dep=Math.max(0,r),depX=DX(dep),sideY=Y(boxZ+bh),sideBottomY=Y(boxZ),sideX=X(x),sideRightX=X(x+w-sideW);
+  const wood=sel?'#8fb7f1':'#c6a77e',stroke=sel?'#1457b8':'#785d40';
+  // Slides on the inner faces of the cabinet sides. Their vertical position follows the real bottom reference.
+  const railZ=drawerRailZ(d),ry=Y(railZ),rxL=X(bounds.x),rxR=X(bounds.end)-Math.max(1,1.5*scale);
+  if(dep>0){
+   if(railType==='undermount'){
+    svg+=`<polygon points="${sideX+sideW*scale},${Y(boxZ)} ${sideX+sideW*scale+depX},${Y(boxZ)-depX*.58} ${sideX+sideW*scale+depX},${Y(boxZ)-depX*.58+Math.max(2,2*scale)} ${sideX+sideW*scale},${Y(boxZ)+Math.max(2,2*scale)}" fill="#697586" fill-opacity=".95" stroke="#374151" stroke-width="1"/>`;
+    svg+=`<polygon points="${sideRightX},${Y(boxZ)} ${sideRightX+depX},${Y(boxZ)-depX*.58} ${sideRightX+depX},${Y(boxZ)-depX*.58+Math.max(2,2*scale)} ${sideRightX},${Y(boxZ)+Math.max(2,2*scale)}" fill="#697586" fill-opacity=".95" stroke="#374151" stroke-width="1"/>`;
+   } else {
+    for(const rx of [rxL,rxR])svg+=`<polygon points="${rx},${ry} ${rx+depX},${ry-depX*.58} ${rx+depX},${ry-depX*.58+Math.max(2,5*scale)} ${rx},${ry+Math.max(2,5*scale)}" fill="#697586" stroke="#374151" stroke-width="1"><title>Șină ${esc(drawerSlideLabel())} · reper Z ${Math.round(railZ)} mm</title></polygon>`;
+   }
+   // Two side walls: each runs the selected rail length and has an independently editable height.
+   for(const [sx,sideName] of [[sideX,'LSS'],[sideRightX,'LDs']]){
+    svg+=`<polygon points="${sx},${sideY} ${sx+depX},${sideY-depX*.58} ${sx+depX},${sideBottomY-depX*.58} ${sx},${sideBottomY}" fill="#c5a57d" fill-opacity=".92" stroke="#856a4b" stroke-width="1.1"><title>${sideName} · ${Math.round(dep)} × ${Math.round(bh)} mm</title></polygon>`;
+   }
+   // Inner front and rear panels fit between the two side walls.
+   const inX=X(x+sideW),inW=Math.max(1,inner*scale),frontY=Y(boxZ+bh),frontPanelH=Math.max(2,cfg.t*scale*.5),rearX=X(x+sideW)+depX;
+   svg+=`<polygon points="${inX},${frontY} ${inX+inW},${frontY} ${inX+inW+DX(cfg.t)},${frontY-DX(cfg.t)*.58} ${inX+DX(cfg.t)},${frontY-DX(cfg.t)*.58}" fill="#d9bd93" fill-opacity=".9" stroke="#856a4b" stroke-width="1"><title>DFS · ${Math.round(inner)} × ${Math.round(bh)} mm</title></polygon>`;
+   svg+=`<polygon points="${rearX},${frontY-depX*.58} ${rearX+inW},${frontY-depX*.58} ${rearX+inW},${sideBottomY-depX*.58} ${rearX},${sideBottomY-depX*.58}" fill="#d9bd93" fill-opacity=".82" stroke="#856a4b" stroke-width="1"><title>DSS · ${Math.round(inner)} × ${Math.round(bh)} mm</title></polygon>`;
+   // Drawer bottom PFL is fixed underneath with screws, without grooves.
+   svg+=`<polygon points="${inX},${sideBottomY} ${inX+inW},${sideBottomY} ${inX+inW+depX},${sideBottomY-depX*.58} ${inX+depX},${sideBottomY-depX*.58}" fill="#ead9bf" fill-opacity=".92" stroke="#856a4b" stroke-width="1"><title>PFL sertar · ${Math.max(0,Math.round(dep)-2)} × ${Math.max(0,Math.round(w)-2)} mm · prins cu șuruburi</title></polygon>`;
+  }
+ }
+ // Front overlay: cabinet width minus 4 mm, 2 mm perimeter gaps; transparency is user-controlled.
+ for(let i=0;i<fronts.length;i++){
+  const d=fronts[i],z=drawerFrontZ(d),yy=Y(z+Number(d.frontH||0)),hh=Number(d.frontH||0)*scale,xx=X(drawerFrontX(d)),ww=drawerFrontWidth(d)*scale,sel=d.id===selectedDrawerId,alpha=frontTransparent?'.30':'.96';
+  svg+=`<rect data-drawer-id="${d.id}" x="${xx}" y="${yy}" width="${ww}" height="${hh}" fill="${sel?'#8fb7f1':'#c6a77e'}" fill-opacity="${alpha}" stroke="${sel?'#1457b8':'#785d40'}" stroke-width="${sel?2.4:1.2}"><title>Sertar ${i+1} · front aplicat ${Math.round(drawerFrontWidth(d))} × ${Math.round(d.frontH)} mm · compartiment ${Number(d.compartment||0)+1} · margini 2 mm</title></rect>`;
+  svg+=`<text data-drawer-id="${d.id}" x="${xx+ww/2}" y="${yy+hh/2}" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#3d2e20" pointer-events="none">Sertar ${i+1} · ${Math.round(d.frontH)} mm</text>`;
+ }
+}
+// Soclul automat este un panou vertical frontal, între laterale, care umple spațiul creat prin ridicarea fundului.
+const socle=parts.find(p=>p.type==='socle');
+if(socle){const xx=X(socle.x),yy=Y(socle.z+socle.h),ww=socle.l*scale,hh=socle.h*scale,dep=DX(socle.d),sel=socle.id===selected,fill=sel?'#8fb7f1':'#c6a77e',stroke=sel?'#1457b8':'#785d40';svg+=`<polygon data-part="${socle.id}" points="${xx},${yy} ${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+dep},${yy-dep*.58}" fill="#dfc39d" stroke="${stroke}" stroke-width="${sel?2.3:1.2}"/>`;svg+=`<rect data-part="${socle.id}" x="${xx}" y="${yy}" width="${ww}" height="${hh}" fill="${fill}" stroke="${stroke}" stroke-width="${sel?2.3:1.2}"><title>Soclu automat · ${Math.round(socle.l)} × ${Math.round(socle.h)} × ${Math.round(socle.d)} mm</title></rect>`;svg+=`<polygon data-part="${socle.id}" points="${xx+ww},${yy} ${xx+ww+dep},${yy-dep*.58} ${xx+ww+dep},${yy+hh-dep*.58} ${xx+ww},${yy+hh}" fill="#b18d62" stroke="${stroke}" stroke-width="1"/>`;}
+// Muchia frontală a despărțitorului se continuă vizual de la mijlocul fundului până la mijlocul tavanului.
+// Este doar o muchie vizuală; fundul rămâne o singură piesă întreagă în dimensiuni și în lista de debitare.
+const centerDividers=parts.filter(p=>p.type==='divider');
+for(const centerDivider of centerDividers){const cx=X(centerDivider.x+cfg.t/2),yTop=Y(cfg.h-cfg.t),yBottom=Y(centerDivider.z);svg+=`<line data-part="${centerDivider.id}" x1="${cx}" y1="${yTop}" x2="${cx}" y2="${yBottom}" stroke="#856a4b" stroke-opacity=".9" stroke-width="${Math.max(1.5,cfg.t*scale*.16)}"/>`; }
+// Ușile sunt suprapuse pe fața dulapului; înălțimea și poziția inferioară se calculează automat din tavan și fund.
+for(const p of parts.filter(p=>p.type==='door')){const xx=X(doorX(p)),yy=Y(doorBottomZ(p)+doorHeight(p)),ww=doorWidth(p)*scale,hh=doorHeight(p)*scale;const sel=p.id===selected;svg+=`<rect data-part="${p.id}" x="${xx}" y="${yy}" width="${ww}" height="${hh}" fill="${sel?'#8fb7f1':'#c6a77e'}" fill-opacity=".94" stroke="${sel?'#1457b8':'#785d40'}" stroke-width="${sel?2.3:1.2}"/>`;svg+=`<text x="${xx+ww/2}" y="${yy+hh/2}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#3d2e20">${esc(displayName(p))} · ${Math.round(doorHeight(p))} × ${Math.round(doorWidth(p))} mm</text>`;if(showHoles){const edge=p.hingeEdge||'left',vertical=edge==='left'||edge==='right',pts=hingePositions(p),r=Math.max(2,17.5*scale);for(const q of pts){const cx=vertical?X(edge==='left'?doorX(p)+21:doorX(p)+doorWidth(p)-21):X(doorX(p)+q.along),cz=vertical?q.along:(edge==='top'?doorBottomZ(p)+doorHeight(p)-21:doorBottomZ(p)+21);const cy=Y(cz);const hx=vertical?cx:X(q.along);svg+=`<circle cx="${hx}" cy="${cy}" r="${r}" fill="none" stroke="#111827" stroke-width="1.6"><title>${displayName(p)} · centru locaș balama · 21 mm de la marginea ${edge==='left'?'stângă':edge==='right'?'dreaptă':edge==='top'?'superioară':'inferioară'} · ${vertical?Math.round(q.along-doorBottomZ(p)):Math.round(q.along-2)} mm de la capăt</title></circle><line x1="${hx-2.5}" y1="${cy}" x2="${hx+2.5}" y2="${cy}" stroke="#111827" stroke-width="1"/><line x1="${hx}" y1="${cy-2.5}" x2="${hx}" y2="${cy+2.5}" stroke="#111827" stroke-width="1"/>`;}}}
+// Marcaje pe tavan/fund/polițe: găuri la capetele piesei, pe adâncime.
+// Marcaje pe laterale: rânduri la mijlocul grosimii fiecărui panou care se întâlnește cu laterala.
+if(showHoles){
+ for(const p of parts.filter(p=>(p.type==='shelf'&&p.supportMode!=='metal')||p.type==='top'||p.type==='bottom'||p.type==='drawerCap')){
+  const yy=Y(p.z), ww=dim(p,'l')*scale, depth=dim(p,'d');
+  const offsets=getHoleOffsets(depth);
+  // Aliniază marcajele de pe panou cu centrul real al îmbinării; la tavanul încadrat, fața de referință este în partea opusă față de poliță.
+  const markY=Y(holeCenterZ(p));
+  const applied=(p.type==='top'&&cfg.topMode==='applied')||(p.type==='bottom'&&cfg.bottomMode==='applied');
+  for(const edge of ['left','right']){
+   for(const pos of offsets){
+    const rawX=applied?(edge==='left'?cfg.t/2:cfg.w-cfg.t/2):(edge==='left'?p.x:p.x+dim(p,'l'));
+    const hx=X(rawX)+DX(pos), hy=markY-DX(pos)*.58;
+    const verticalMark=applied;
+    const halfMark=4.2;
+    svg+=`<line x1="${hx-(verticalMark?0:halfMark)}" y1="${hy-(verticalMark?halfMark:0)}" x2="${hx+(verticalMark?0:halfMark)}" y2="${hy+(verticalMark?halfMark:0)}" stroke="#111827" stroke-width="2.2" stroke-linecap="round"><title>${displayName(p)} · ${applied?'direcție de găurire verticală, de sus în jos':'marcaj de găurire orizontal la capătul '+(edge==='left'?'stâng':'drept')} · ${pos} mm de la față</title></line>`;
+   }
+  }
+ }
+ // Despărțitorul vertical se prinde și în tavan și în fund: afișăm marcajele pe ambele capete.
+ for(const p of parts.filter(q=>q.type==='divider')){
+  const endEdges=[{label:'sus',z:p.z+p.l},{label:'jos',z:p.z}];
+  for(const edge of endEdges){
+   for(const pos of getHoleOffsets(cfg.d)){
+    const hx=X(p.x+cfg.t/2)+DX(pos),hy=Y(edge.z)-DX(pos)*.58;
+    const halfMark=4.2;
+    svg+=`<line x1="${hx}" y1="${hy-halfMark}" x2="${hx}" y2="${hy+halfMark}" stroke="#111827" stroke-width="2.2" stroke-linecap="round"><title>${displayName(p)} · marcaj vertical de găurire în cantul ${edge.label} · ${pos} mm de la față/spate</title></line>`;
+   }
+  }
+ }
+ const sidesForMarks=parts.filter(p=>p.type==='side');
+ const joints=parts.filter(p=>['shelf','top','bottom','drawerCap'].includes(p.type));
+ for(const side of sidesForMarks){
+  for(const panel of joints){
+   if(panel.type==='shelf'&&!shelfTouchesSide(panel,side))continue;
+   if(panel.type==='drawerCap'&&!panelTouchesOuterSide(panel,side))continue;
+   const supportRow=panel.type==='shelf'&&panel.supportMode==='metal';
+   const appliedTop=panel.type==='top'&&cfg.topMode==='applied';
+   const appliedBottom=panel.type==='bottom'&&cfg.bottomMode==='applied';
+   const appliedEdge=appliedTop||appliedBottom;
+   const centerZ=holeCenterZ(panel);
+   const markZ=supportRow?panel.z-cfg.t-2:appliedTop?side.z+side.l:appliedBottom?side.z:centerZ;
+   if(!appliedEdge&&(markZ<side.z||markZ>side.z+side.l))continue;
+   const sideMarkX=supportRow
+    ?(side.name==='Laterală stângă'?side.x+cfg.t:side.x)
+    :appliedEdge
+     ?(side.name==='Laterală stângă'?side.x+sideEdgeOffset:side.x+cfg.t-sideEdgeOffset)
+     :(side.x+(side.name==='Laterală dreaptă'?cfg.t:0));
+   for(const pos of (supportRow?getSupportOffsets(cfg.d):getHoleOffsets(cfg.d))){
+    const hx=X(sideMarkX)+DX(pos),hy=supportRow?Y(panel.z-cfg.t)-DX(pos)*.58+4:Y(markZ)-DX(pos)*.58;
+    const kind=supportRow?'suport poliță Ø5 mm; centru la 2 mm sub fața inferioară':appliedTop?'găurire în cantul superior':appliedBottom?'găurire în cantul inferior':'rând la mijlocul grosimii';
+    const verticalMark=appliedTop||appliedBottom;
+    const halfMark=4.2;
+    svg+=`<line x1="${hx-(verticalMark?0:halfMark)}" y1="${hy-(verticalMark?halfMark:0)}" x2="${hx+(verticalMark?0:halfMark)}" y2="${hy+(verticalMark?halfMark:0)}" stroke="#111827" stroke-width="2.2" stroke-linecap="round"><title>${side.name} · ${panel.name} · ${kind} · ${supportRow?'pe fața interioară, fără decalaj de 9 mm':(appliedEdge?sideEdgeOffset:Math.round(cfg.t/2)+' mm de la exteriorul lateralei')} · centru la ${Math.round(markZ-side.z)} mm de la baza lateralei · ${pos} mm de la față/spate</title></line>`;
+   }
+  }
+ }
+ // Suporturile metalice ale polițelor segmentate se găuresc și pe fețele interioare
+ // ale intermediarilor verticali, nu doar pe lateralele exterioare ale dulapului.
+ for(const divider of parts.filter(q=>q.type==='divider'||q.type==='drawerDivider')){
+  for(const panel of parts.filter(q=>q.type==='shelf'&&q.supportMode==='metal')){
+   const leftEdge=panel.x,rightEdge=panel.x+dim(panel,'l'),dividerLeft=divider.x,dividerRight=divider.x+cfg.t,eps=1.5;
+   const onRightFace=Math.abs(leftEdge-dividerRight)<=eps;
+   const onLeftFace=Math.abs(rightEdge-dividerLeft)<=eps;
+   if(!onRightFace&&!onLeftFace)continue;
+   const markZ=panel.z-cfg.t-2;
+   if(markZ<divider.z-1||markZ>divider.z+divider.l+1)continue;
+   const faceX=onRightFace?dividerRight:dividerLeft;
+   for(const pos of getSupportOffsets(cfg.d)){
+    const hx=X(faceX)+DX(pos),hy=Y(panel.z-cfg.t)-DX(pos)*.58+4;
+    svg+=`<line x1="${hx-4.2}" y1="${hy}" x2="${hx+4.2}" y2="${hy}" stroke="#111827" stroke-width="2.2" stroke-linecap="round"><title>${displayName(divider)} · ${displayName(panel)} · suport poliță Ø5 mm · fața ${onRightFace?'dreaptă':'stângă'} a intermediarului · centru la 2 mm sub fața inferioară · ${pos} mm de la față/spate</title></line>`;
+   }
+  }
+ }
+ // Fundurile intermediare FI se prind în muchiile intermediarilor verticali care le delimitează,
+ // nu pe ambele laterale exterioare. Marcajele apar doar pe separatorul aflat la fiecare capăt al FI.
+ for(const cap of parts.filter(q=>q.type==='drawerCap')){
+  const centerZ=holeCenterZ(cap), leftEdge=cap.x, rightEdge=cap.x+dim(cap,'l');
+  for(const divider of parts.filter(q=>q.type==='divider'||q.type==='drawerDivider')){
+   const dividerLeft=divider.x, dividerRight=divider.x+cfg.t, eps=1.5;
+   const touchesLeft=Math.abs(rightEdge-dividerLeft)<=eps;
+   const touchesRight=Math.abs(leftEdge-dividerRight)<=eps;
+   if(!touchesLeft&&!touchesRight)continue;
+   if(centerZ<divider.z-1||centerZ>divider.z+divider.l+1)continue;
+   for(const pos of getHoleOffsets(cfg.d)){
+    const hx=X(divider.x+cfg.t/2)+DX(pos),hy=Y(centerZ)-DX(pos)*.58;
+    svg+=`<line x1="${hx-4.2}" y1="${hy}" x2="${hx+4.2}" y2="${hy}" stroke="#111827" stroke-width="2.2" stroke-linecap="round"><title>${displayName(cap)} · ${displayName(divider)} · marcaj de îmbinare la FI · ${pos} mm de la față/spate</title></line>`;
+   }
+  }
+ }
+}
+// Live vertical displacement of the selected bottom relative to its original/base position.
+let active=partById(selected);
+if(active&&active.type==='bottom'&&cfg.bottomMode==='between'){
+ const displacement=Math.round(active.z-(active.baseZ??cfg.t));
+ const dimX=Math.max(24,X(0)-24), baseY=Y(active.baseZ??cfg.t), currentY=Y(active.z);
+ const y1=Math.min(baseY,currentY), y2=Math.max(baseY,currentY);
+ svg+=`<line x1="${dimX}" y1="${y1}" x2="${dimX}" y2="${y2}" stroke="#2368d8" stroke-width="1.7" stroke-dasharray="3 2"/>`;
+ svg+=`<line x1="${dimX-5}" y1="${baseY}" x2="${dimX+5}" y2="${baseY}" stroke="#2368d8" stroke-width="1.5"/>`;
+ svg+=`<line x1="${dimX-5}" y1="${currentY}" x2="${dimX+5}" y2="${currentY}" stroke="#2368d8" stroke-width="1.5"/>`;
+ // Keep the numeric callout readable even for a small 5–10 mm movement.
+ const labelY=Math.max(24,Math.min(H-45,(baseY+currentY)/2-11));
+ const labelX=Math.max(8,Math.min(W-112,dimX+8));
+ svg+=`<rect x="${labelX}" y="${labelY}" width="104" height="23" rx="5" fill="#2368d8"/>`;
+ svg+=`<text x="${labelX+52}" y="${labelY+15}" text-anchor="middle" fill="white" font-size="10.5" font-weight="700">Deplasare: ${displacement>0?'+':''}${displacement} mm</text>`;
+}
+// Live clearances while a shelf is selected: ceiling-to-shelf and shelf-to-bottom.
+if(active&&active.type==='shelf'){
+ const topUnderside=cfg.h-(cfg.topMode==='applied'?cfg.t:2*cfg.t);
+ const topGap=Math.round(topUnderside-active.z);
+ const bottomGap=Math.round(Math.max(0,active.z-2*cfg.t));
+ const dimXRight=Math.min(W-18,X(cfg.w)+sd+12), dimXLeft=Math.max(18,X(0)-18);
+ const topY=Y(topUnderside), shelfTopY=Y(active.z), shelfBottomY=Y(active.z-cfg.t), bottomTopY=Y(cfg.t);
+ // Right-side dimension from underside of ceiling to the top of the shelf.
+ svg+=`<line x1="${dimXRight}" y1="${topY}" x2="${dimXRight}" y2="${shelfTopY}" stroke="#2368d8" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+ svg+=`<line x1="${dimXRight-5}" y1="${topY}" x2="${dimXRight+5}" y2="${topY}" stroke="#2368d8" stroke-width="1.5"/>`;
+ svg+=`<line x1="${dimXRight-5}" y1="${shelfTopY}" x2="${dimXRight+5}" y2="${shelfTopY}" stroke="#2368d8" stroke-width="1.5"/>`;
+ const topLabelY=Math.max(24,Math.min(H-70,(topY+shelfTopY)/2-12));
+ svg+=`<rect x="${Math.max(8,dimXRight-105)}" y="${topLabelY}" width="100" height="23" rx="5" fill="#2368d8"/>`;
+ svg+=`<text x="${Math.max(58,dimXRight-55)}" y="${topLabelY+15}" text-anchor="middle" fill="white" font-size="11" font-weight="700">Tavan: ${topGap} mm</text>`;
+ // Left-side dimension from the upper face of the bottom panel to the underside of the shelf.
+ svg+=`<line x1="${dimXLeft}" y1="${shelfBottomY}" x2="${dimXLeft}" y2="${bottomTopY}" stroke="#475467" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+ svg+=`<line x1="${dimXLeft-5}" y1="${shelfBottomY}" x2="${dimXLeft+5}" y2="${shelfBottomY}" stroke="#475467" stroke-width="1.5"/>`;
+ svg+=`<line x1="${dimXLeft-5}" y1="${bottomTopY}" x2="${dimXLeft+5}" y2="${bottomTopY}" stroke="#475467" stroke-width="1.5"/>`;
+ const bottomLabelY=Math.max(24,Math.min(H-45,(shelfBottomY+bottomTopY)/2-11));
+ svg+=`<rect x="${Math.max(8,dimXLeft+7)}" y="${bottomLabelY}" width="100" height="23" rx="5" fill="#475467"/>`;
+ svg+=`<text x="${Math.max(58,dimXLeft+57)}" y="${bottomLabelY+15}" text-anchor="middle" fill="white" font-size="11" font-weight="700">Fund: ${bottomGap} mm</text>`;
+}
+// Triada de axe globale, micșorată și fără titlu/explicații pentru a păstra spațiu de proiectare.
+// Scara 0,5 păstrează reperul în aceeași zonă aproximativă a planșei.
+svg+=`<g id="axisTriad" transform="translate(7 178) scale(.5)" aria-label="Axe de coordonate X, Y și Z">
+<circle cx="43" cy="431" r="2.8" fill="#344054"/>
+<line x1="43" y1="431" x2="91" y2="431" stroke="#d92d20" stroke-width="2.5" stroke-linecap="round"/>
+<polygon points="97,431 88,426.5 88,435.5" fill="#d92d20"/>
+<text x="99" y="435" font-size="12" font-weight="700" fill="#d92d20">X</text>
+<line x1="43" y1="431" x2="69" y2="405" stroke="#039855" stroke-width="2.5" stroke-linecap="round"/>
+<polygon points="73,401 70.5,411 64,404.5" fill="#039855"/>
+<text x="74" y="401" font-size="12" font-weight="700" fill="#039855">Y</text>
+<line x1="43" y1="431" x2="43" y2="383" stroke="#175cd3" stroke-width="2.5" stroke-linecap="round"/>
+<polygon points="43,377 38.5,386 47.5,386" fill="#175cd3"/>
+<text x="33" y="380" font-size="12" font-weight="700" fill="#175cd3">Z</text>
+</g>`;
+svg+=`<text x="${W/2}" y="${H-12}" text-anchor="middle" fill="#667085" font-size="12">Vedere schematică · mm</text></svg>`;$('canvas').innerHTML=svg;
+}
+function svgYFromClient(clientY){const svgEl=$('canvas').querySelector('svg');if(!svgEl)return 0;const pt=svgEl.createSVGPoint();pt.x=0;pt.y=clientY;const ctm=svgEl.getScreenCTM();if(!ctm)return 0;return pt.matrixTransform(ctm.inverse()).y;}
+// Stable delegated pointer handlers: re-rendering the SVG while dragging must not lose the drag.
+let drawerDragState=null;
+$('canvas').addEventListener('pointerdown',e=>{
+ const drawerTarget=e.target.closest('[data-drawer-id]');
+ if(drawerTarget&&projectMode==='drawers'){
+  const id=Number(drawerTarget.getAttribute('data-drawer-id'));const d=drawers.find(q=>q.id===id);if(!d)return;
+  e.preventDefault();selectedDrawerId=id;drawerDragState={id,startClientY:e.clientY,startSvgY:svgYFromClient(e.clientY),startZ:drawerFrontZ(d),startDrawers:drawers.map(q=>({id:q.id,z:drawerFrontZ(q)})),startBottomZ:parts.find(q=>q.type==='bottom')?.z,startBottomBase:parts.find(q=>q.type==='bottom')?.baseZ??cfg.t,moved:false,pointerId:e.pointerId};renderDrawerUI();renderSvg();return;
+ }
+ const target=e.target.closest('[data-part]');
+ // În modul sertare, calculăm compartimentul după coordonata reală a atingerii în SVG.
+ // Nu condiționăm de target-ul SVG: muchiile, fundul sau intermediarii pot primi atingerea
+ // înaintea spațiului gol și altfel selectorul rămâne blocat pe compartimentul anterior.
+ if(projectMode==='drawers'&&viewZoom===1){
+  const svgEl=$('canvas').querySelector('svg');
+  if(svgEl){
+   const pt=svgEl.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+   const ctm=svgEl.getScreenCTM();
+   if(ctm){
+    const q=pt.matrixTransform(ctm.inverse());
+    const sc=Math.min(330/cfg.h,260/cfg.w,1),sd=cfg.d*sc*.52,ox=(600-cfg.w*sc-sd)/2+sd*.45,oy=(490-cfg.h*sc-sd*.58)/2+20;
+    const physicalX=(q.x-ox)/sc,physicalZ=cfg.h-(q.y-oy)/sc;
+    const bounds=shelfCompartments();
+    if(physicalX>=cfg.t&&physicalX<=cfg.w-cfg.t&&physicalZ>=cfg.t&&physicalZ<=cfg.h-cfg.t){
+     let idx=-1;
+     const dividers=parts.filter(p=>p.type==='divider').sort((a,b)=>a.x-b.x);
+     const hitDivider=dividers.findIndex(d=>physicalX>=d.x-1&&physicalX<=d.x+cfg.t+1);
+     if(hitDivider>=0)idx=physicalX<dividers[hitDivider].x+cfg.t/2?hitDivider:hitDivider+1;
+     else idx=bounds.findIndex(b=>physicalX>=b.x&&physicalX<=b.end);
+     if(idx>=0&&idx<bounds.length){drawerCompartmentSelected=idx;$('drawerCompartment').value=String(idx);renderDrawerUI();}
+    }
+   }
+  }
+ }
+ // La zoom mărit, tragerea de pe spațiul liber deplasează vederea; tragerea unei polițe o mută.
+ if(!target&&viewZoom>1){
+   e.preventDefault();const svgEl=$('canvas').querySelector('svg');const rect=svgEl.getBoundingClientRect();
+   panState={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,startPanX:viewPanX,startPanY:viewPanY,vbW:600/viewZoom,vbH:490/viewZoom,rectW:rect.width,rectH:rect.height};
+   return;
+ }
+ if(!target)return;
+ const id=Number(target.getAttribute('data-part'));const p=partById(id);if(!p)return;
+ selected=id;
+ const movableBottom=p.type==='bottom'&&cfg.bottomMode==='between';
+ const movableDivider=p.type==='divider'&&!p.fixed;
+ if((p.type==='shelf'&&!p.fixed)||movableBottom||movableDivider){
+   e.preventDefault();dragState={id,startClientY:e.clientY,startClientX:e.clientX,startSvgY:svgYFromClient(e.clientY),startZ:p.z,startX:p.x,startDrawerZ:drawers.map(d=>({id:d.id,z:d.z})),startShelfPositions:parts.filter(q=>q.type==='shelf').map(q=>({id:q.id,z:q.z,name:q.name})),startDividerPositions:parts.filter(q=>q.type==='divider').map(q=>({id:q.id,x:q.x})),moved:false,pointerId:e.pointerId};
+ }
+ render();
+});
+document.addEventListener('pointermove',e=>{
+ if(panState&&e.pointerId===panState.pointerId){
+   const dx=(e.clientX-panState.startX)*panState.vbW/Math.max(1,panState.rectW);
+   const dy=(e.clientY-panState.startY)*panState.vbH/Math.max(1,panState.rectH);
+   viewPanX=clamp(panState.startPanX-dx,-600*.7,600*.7);
+   viewPanY=clamp(panState.startPanY-dy,-490*.7,490*.7);
+   renderSvg();return;
+ }
+ if(drawerDragState&&e.pointerId===drawerDragState.pointerId){
+  const d=drawers.find(q=>q.id===drawerDragState.id);if(!d)return;
+  if(Math.abs(e.clientY-drawerDragState.startClientY)>3)drawerDragState.moved=true;
+  if(!drawerDragState.moved)return;
+  const currentY=svgYFromClient(e.clientY),deltaY=currentY-drawerDragState.startSvgY,scale=Math.min(330/cfg.h,260/cfg.w,1);
+  const requestedZ=Math.round(drawerDragState.startZ-deltaY/scale);
+  const wantedDelta=requestedZ-drawerDragState.startZ;
+  const bottom=parts.find(q=>q.type==='bottom');
+  const base=bottom?(drawerDragState.startBottomBase??bottom.baseZ??cfg.t):cfg.t;
+  const startBottom=bottom?(drawerDragState.startBottomZ??bottom.z):base;
+  const selectedDrawer=drawers.find(q=>q.id===drawerDragState.id);
+  // Sertarele se deplasează în lanț numai în compartimentul lor; alte compartimente rămân independente.
+  const starts=drawerDragState.startDrawers.map(v=>({...v,part:drawers.find(q=>q.id===v.id)})).filter(v=>v.part&&Number(v.part.compartment||0)===Number(selectedDrawer?.compartment||0)).sort((a,b)=>a.z-b.z);
+  const index=starts.findIndex(v=>v.id===drawerDragState.id);
+  if(index<0)return;
+  const topLimit=cfg.h-cfg.t-9; // rezervă pentru placa FI de deasupra acestei coloane
+  // Întreaga coloană de sertare se deplasează ca un pachet; astfel FI rămâne deasupra ei,
+  // iar la coborâre sertarele se așază împreună lângă fund, fără să se suprapună.
+  const group=starts,low=group[0],high=group[group.length-1];
+  const minDelta=drawerBottomReference()-low.z;
+  const maxDelta=topLimit-(high.z+Number(high.part.frontH||0));
+  const actualDelta=clamp(wantedDelta,minDelta,Math.max(minDelta,maxDelta));
+  for(const v of group){const q=drawers.find(x=>x.id===v.id);if(q)q.z=v.z+actualDelta;}
+  render();return;
+ }
+ if(!dragState||e.pointerId!==dragState.pointerId)return;
+ const p=partById(dragState.id);if(!p)return;
+ const currentY=svgYFromClient(e.clientY);const delta=currentY-dragState.startSvgY;
+ if(Math.abs(e.clientY-dragState.startClientY)>3||Math.abs(e.clientX-(dragState.startClientX??e.clientX))>3)dragState.moved=true;
+ if(!dragState.moved)return;
+ const scale=Math.min(330/cfg.h,260/cfg.w,1);
+ if(p.type==='divider'){const svgEl=$('canvas').querySelector('svg');const rect=svgEl?.getBoundingClientRect();const svgDx=rect?((e.clientX-dragState.startClientX)*600/viewZoom/Math.max(1,rect.width)):0;const requestedX=dragState.startX+svgDx/scale;const b=dividerXBounds(p,dragState.startDividerPositions||[]);p.x=clamp(requestedX,Math.min(b.min,b.max),Math.max(b.min,b.max));render();return;}
+ const movableBottom=p.type==='bottom'&&cfg.bottomMode==='between';
+ if(p.type==='shelf'){const requestedZ=Math.round(dragState.startZ-delta/scale);moveShelfWithCollisions(p,requestedZ,dragState.startShelfPositions||[]);render();return;}
+ const requestedZ=Math.round(dragState.startZ-delta/scale);
+ if(movableBottom){moveBottomWithShelfCollisions(p,clamp(requestedZ,cfg.t,cfg.h-cfg.t),dragState.startShelfPositions||[]);}else{p.z=clamp(requestedZ,cfg.t+cfg.t,cfg.h-2*cfg.t);}
+ if(movableBottom&&drawers.length){const startLow=Math.min(...dragState.startDrawerZ.map(q=>q.z));const startHigh=Math.max(...dragState.startDrawerZ.map(q=>{const d=drawers.find(x=>x.id===q.id);return q.z+Number(d?.frontH||0)}));const maxUp=Math.max(0,cfg.h-cfg.t-9-startHigh);const maxDown=Math.max(0,Math.min(dragState.startZ-cfg.t,startLow-2));p.z=clamp(p.z,dragState.startZ-maxDown,dragState.startZ+maxUp);const shift=p.z-dragState.startZ;for(const d of drawers){const initial=dragState.startDrawerZ.find(q=>q.id===d.id);if(initial)d.z=initial.z+shift;}drawers.sort((a,b)=>a.z-b.z);drawers[0].z=drawerBottomReference();recalcDrawerChain(1);}
+ render();
+});
+function finishDrag(e){
+ let changed=false,drawerChanged=false;
+ if(drawerDragState&&(e.pointerId===undefined||e.pointerId===drawerDragState.pointerId)){drawerDragState=null;changed=true;drawerChanged=true;}
+ if(panState&&(e.pointerId===undefined||e.pointerId===panState.pointerId)){panState=null;changed=true;}
+ if(dragState&&(e.pointerId===undefined||e.pointerId===dragState.pointerId)){const movedPart=partById(dragState.id);if(movedPart&&movedPart.type==='bottom'){syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();}if(movedPart&&movedPart.type==='divider'&&dragState.moved)resplitShelvesByDividers();dragState=null;changed=true;}
+ if(drawerChanged){syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();}
+ if(changed)render();
+}
+document.addEventListener('pointerup',finishDrag);document.addEventListener('pointercancel',finishDrag);
+
+function getHoleOffsets(depth){const a=clamp(Math.round(holeOffsets[0]),1,Math.max(1,depth-1));const b=clamp(Math.round(holeOffsets[1]),1,Math.max(1,depth-1));return [a,b,depth-b,depth-a].filter(v=>v>0&&v<depth).filter((v,i,arr)=>arr.indexOf(v)===i).sort((x,y)=>x-y)}
+function getSupportOffsets(depth){return [50,depth-50].filter((v,i,a)=>v>0&&v<depth&&a.indexOf(v)===i).sort((a,b)=>a-b)}
+function holeCenterZ(panel){if(panel.type==='top'&&cfg.topMode==='applied')return cfg.h-cfg.t;if(panel.type==='bottom'&&cfg.bottomMode==='applied')return cfg.t;return panel.type==='top'&&cfg.topMode==='between'?cfg.h-cfg.t/2:panel.z-cfg.t/2}
+// O poliță segmentată de despărțitor generează găuri pe laterala exterioară doar dacă acel segment ajunge efectiv la laterală.
+function shelfTouchesSide(panel,side){if(panel.type!=='shelf')return true;const leftEdge=panel.x,rightEdge=panel.x+dim(panel,'l');const eps=1.5;return side.name==='Laterală stângă'?Math.abs(leftEdge-cfg.t)<=eps:side.name==='Laterală dreaptă'?Math.abs(rightEdge-(cfg.w-cfg.t))<=eps:false;}
+function panelTouchesOuterSide(panel,side){const leftEdge=panel.x,rightEdge=panel.x+dim(panel,'l'),eps=1.5;return side.name==='Laterală stângă'?Math.abs(leftEdge-cfg.t)<=eps:side.name==='Laterală dreaptă'?Math.abs(rightEdge-(cfg.w-cfg.t))<=eps:false;}
+function applyHoleOffsets(){const p=partById(selected);const depth=p&&['shelf','top','bottom','drawerCap'].includes(p.type)?dim(p,'d'):cfg.d;let a=Number($('holeOffset1').value),b=Number($('holeOffset2').value),edgeOffset=Number($('sideEdgeOffset').value);if(!Number.isFinite(a)||!Number.isFinite(b)||a<1||b<1){$('holeInfo').textContent='Introdu două distanțe numerice mai mari decât 0 mm.';return}if(!Number.isFinite(edgeOffset)||edgeOffset<1||edgeOffset>=cfg.t){$('holeInfo').textContent=`Distanța față de exterior trebuie să fie între 1 mm și mai puțin de grosimea plăcii (${cfg.t} mm).`;return}a=Math.round(a);b=Math.round(b);if(a===b){$('holeInfo').textContent='Cele două distanțe trebuie să fie diferite.';return}if(a>=depth||b>=depth){$('holeInfo').textContent=`Distanțele trebuie să fie mai mici decât adâncimea piesei (${depth} mm).`;return}holeOffsets=[a,b].sort((x,y)=>x-y);sideEdgeOffset=Math.round(edgeOffset);$('sideEdgeOffset').value=sideEdgeOffset;$('holeOffset1').value=holeOffsets[0];$('holeOffset2').value=holeOffsets[1];render();holeReport()}
+function renderHoleInfo(){let p=partById(selected);if(!p){$('holeInfo').textContent='Selectează o piesă pentru a vedea schema găurilor.';return}if(p.type==='door'){$('holeInfo').textContent=`${displayName(p)}: ${hingeCount(p)} balama(e), margine ${p.hingeEdge||'left'}, centru la 21 mm de margine. Activează „Afișează centrele găurilor pe model” pentru a vedea locașurile.`;return}if(p.type==='side'){$('holeInfo').textContent=`${displayName(p)}: la TV/FD aplicat, găurile se dau în cantul lateral, pe muchia de sus/jos. Poziția transversală este implicit ${sideEdgeOffset} mm de la fața exterioară a lateralei (centrul grosimii este ${cfg.t/2} mm pentru placă de ${cfg.t} mm). La piesele încadrate, rândul rămâne la mijlocul grosimii panoului. Lista de mai jos arată cotele verticale și distanțele pe adâncime.`;return}if(p.type==='divider'){$('holeInfo').textContent='IV: lista de mai jos arată găurile de îmbinare pentru fiecare poliță din stânga și din dreapta, la înălțimea proprie a fiecărei polițe.';return}if(!['shelf','top','bottom','drawerCap'].includes(p.type)){$('holeInfo').textContent='Pentru moment, schema de găurire este disponibilă pentru laterale, despărțitor, polițe, tavan și fund.';return}let r=Math.max(p.redD,p.redL);$('holeInfo').textContent=p.type==='shelf'&&p.supportMode==='metal'?`${displayName(p)}: montaj pe suporturi metalice. Găuri Ø5 mm în laterale, cu centrul la 2 mm sub fața inferioară a poliței; nu se marchează găuri de îmbinare în poliță.`:`${displayName(p)}: adâncime finală ${dim(p,'d')} mm; lungime finală ${dim(p,'l')} mm. Marcajele de la capete sunt listate în raport; rândurile de pe laterale sunt calculate la mijlocul grosimii acestei piese. Reducere dimensională maximă: ${r} mm.`}
+function holeReport(){
+ const p=partById(selected);
+ if(!p){$('holeReportOut').innerHTML='<div class="small">Selectează piesa pentru care vrei lista găurilor.</div>';return}
+ if(p.type==='socle'){$('holeReportOut').innerHTML=`<div class="small"><b>SOC</b> · piesă de închidere frontală, calculată automat. Dimensiuni: ${Math.round(p.l)} mm lungime × ${Math.round(p.h)} mm înălțime × ${Math.round(p.d)} mm grosime. Nu se generează marcaje de găurire pentru această piesă în prototip.</div>`;return;}
+ if(p.type==='side'){
+  const sideBottom=p.z,sideTop=p.z+p.l;
+  const panels=parts.filter(q=>['shelf','top','bottom','drawerCap'].includes(q.type)).filter(q=>q.type!=='shelf'||shelfTouchesSide(q,p)).map(q=>{const support=q.type==='shelf'&&q.supportMode==='metal';const applied=(q.type==='top'&&cfg.topMode==='applied')||(q.type==='bottom'&&cfg.bottomMode==='applied');const z=support?q.z-cfg.t-2:applied?(q.type==='top'?sideTop:sideBottom):holeCenterZ(q);return {panel:q,center:z,support,applied};}).filter(q=>q.center>=sideBottom&&q.center<=sideTop).sort((a,b)=>b.center-a.center);
+  const rows=[];
+  for(const {panel,center,support,applied} of panels){const zValue=center;for(const depth of (support?getSupportOffsets(cfg.d):getHoleOffsets(cfg.d))){rows.push({panel:displayName(panel),kind:support?'SUPORT METALIC Ø5 mm · centru la 2 mm sub poliță':applied?(panel.type==='top'?'CANT SUPERIOR':'CANT INFERIOR'):'mijlocul grosimii panoului',z:Math.round(zValue-sideBottom),top:Math.round(sideTop-zValue),x:support?'fața interioară (fără decalaj de 9 mm)':(applied?sideEdgeOffset:Math.round(cfg.t/2)),depth,from:depth<=cfg.d/2?'față':'spate'});}}
+  $('holeReportOut').innerHTML=`<div class="small" style="margin:8px 0"><b>${displayName(p)}</b> · Înălțime ${Math.round(p.l)} mm, adâncime ${Math.round(cfg.d)} mm. La tavan/fund aplicat, găurile sunt pe cantul superior/inferior al lateralei, iar poziția transversală se măsoară de la fața exterioară. Pentru rândurile obișnuite de îmbinare, poziția este la mijlocul grosimii panoului (9 mm pentru placă de 18 mm). Rândurile „Suport poliță” sunt exceptate: se găuresc pe fața interioară a lateralei, fără decalaj de 9 mm.</div><table class="holetable"><thead><tr><th>Piesă de întâlnire</th><th>Tip rând</th><th>De la bază (mm)</th><th>De sus (mm)</th><th>Poziție pe grosime</th><th>De la față/spate (mm)</th></tr></thead><tbody>${rows.map(q=>`<tr><td>${q.panel}</td><td>${q.kind}</td><td>${q.z}</td><td>${q.top}</td><td>${q.x}</td><td>${q.depth} (${q.from})</td></tr>`).join('')}</tbody></table><div class="small">Acestea sunt coordonatele geometrice ale centrelor. Tipul diblului/șurubului, diametrul, adâncimea găurii și distanțele minime de la muchii trebuie stabilite separat.</div>`;
+  return;
+ }
+ if(p.type==='divider'){
+  const shelves=parts.filter(q=>q.type==='shelf').map(sh=>{
+   const left=Math.abs((sh.x+dim(sh,'l'))-p.x)<=2;
+   const right=Math.abs(sh.x-(p.x+cfg.t))<=2;
+   return {sh,left,right};
+  }).filter(q=>q.left||q.right).sort((a,b)=>b.sh.z-a.sh.z);
+  const rows=[];
+  const endDistances=`Spate: ${holeOffsets[0]} + ${holeOffsets[1]}<br>Față: ${holeOffsets[0]} + ${holeOffsets[1]}`;
+  rows.push({shelf:'Tavan',face:'SUS',kind:'Găurire în cantul superior al IV',z:Math.round(p.z+p.l),distances:endDistances,x:Math.round(p.x+cfg.t/2)});
+  rows.push({shelf:parts.some(q=>q.type==='drawerCap')?'Fund intermediar peste sertare':'Fund',face:'JOS',kind:'Găurire în cantul inferior al IV',z:Math.round(p.z),distances:endDistances,x:Math.round(p.x+cfg.t/2)});
+  for(const {sh,left,right} of shelves){
+   const support=sh.supportMode==='metal';
+   const z=support?sh.z-cfg.t-2:holeCenterZ(sh);
+   const reduction=Math.max(0,Math.round(sh.redD||0));
+   const a=holeOffsets[0],b=holeOffsets[1];
+   const backA=Math.max(0,a-(sh.edge==='back'?reduction:0));
+   const frontA=Math.max(0,a-(sh.edge==='front'?reduction:0));
+   const distanceSummary=support?`Spate: 50<br>Față: 50`:`Spate: ${backA} + ${b}<br>Față: ${frontA} + ${b}`;
+   for(const face of (left?['Stânga']:[]).concat(right?['Dreapta']:[])){
+    rows.push({shelf:displayName(sh),face:face==='Stânga'?'ST':'DR',kind:support?'Suport metalic Ø5 mm':'Îmbinare poliță',z:Math.round(z),distances:distanceSummary,x:Math.round(p.x+(face==='Stânga'?0:cfg.t))});
+   }
+  }
+  $('holeReportOut').innerHTML=`<div class="small" style="margin:8px 0"><b>${displayName(p)}</b> · Sunt incluse marcajele de găurire în cant la capătul de sus (tavan), la capătul de jos (fund) și la fiecare poliță care se întâlnește cu despărțitorul. Polițele din stânga și din dreapta sunt tratate separat, astfel încât mutarea uneia nu schimbă înălțimea găurilor celeilalte. Pentru îmbinare obișnuită, centrele sunt la mijlocul grosimii poliței; la „Suport poliță”, se folosesc cele două poziții de suport față/spate.</div>${rows.length?`<table class="holetable"><thead><tr><th>Poliță</th><th>Fața DES.</th><th>Tip găurire</th><th>Z de la bază (mm)</th><th>Dist. șablon (mm)</th><th>X pe piesă (mm)</th></tr></thead><tbody>${rows.map(q=>`<tr><td>${q.shelf}</td><td>${q.face}</td><td>${q.kind}</td><td>${q.z}</td><td>${q.distances}</td><td>${q.x}</td></tr>`).join('')}</tbody></table>`:'<div class="small">Nu există polițe care să se întâlnească cu despărțitorul. Adaugă despărțitorul central sau verifică pozițiile și lungimile polițelor.</div>'}<div class="small">Coordonatele sunt geometrice; verifică metoda de îmbinare și adâncimea găurilor înainte de găurirea efectivă.</div>`;
+  return;
+ }
+ if(p.type==='door'){const edge=p.hingeEdge||'left',vertical=edge==='left'||edge==='right',pts=hingePositions(p);$('holeReportOut').innerHTML=`<div class="small" style="margin:8px 0"><b>${displayName(p)}</b> · ${pts.length} balama(e) poziționată(e)${pts.length<hingeCount(p)?' din '+hingeCount(p)+' solicitate (nu încap toate respectând distanțele minime)':''}. Centrul fiecărui locaș este la 21 mm de marginea ${edge==='left'?'stângă':edge==='right'?'dreaptă':edge==='top'?'superioară':'inferioară'}. ${hingeCount(p)===1?'Poziția unică este centrată cât mai mult posibil.':'Prima/ultima poziție este nominal la 100 mm de capăt.'} Pozițiile se ajustează pentru a evita polițele, păstrând minimum 80 mm față de suprafețele acestora. Diametrul locașului nu este cotat în desen.</div><table class="holetable"><thead><tr><th>Balama</th><th>De la marginea balamalelor (mm)</th><th>De la capătul inferior/stâng (mm)</th><th>Notă</th></tr></thead><tbody>${pts.map((q,i)=>`<tr><td>${i+1}</td><td>21</td><td>${Math.round(q.along-(vertical?doorBottomZ(p):2))}</td><td>${q.clearance?'Atenție: poziție ajustată; verifică manual':'Centru calculat'}</td></tr>`).join('')}</tbody></table>`;return}if(!(p.type==='shelf'||p.type==='top'||p.type==='bottom'||p.type==='drawerCap')){$('holeReportOut').innerHTML='<div class="small">Pentru moment, raportul este disponibil pentru uși, laterale, polițe, tavan, fund și despărțitor.</div>';return}
+ const l=dim(p,'l'),d=dim(p,'d'),depths=getHoleOffsets(d),centerZ=Math.round(holeCenterZ(p));
+ if(p.type==='shelf'&&p.supportMode==='metal'){
+  $('holeReportOut').innerHTML=`<div class="small" style="margin:8px 0"><b>${displayName(p)}</b> · Montaj „Suport poliță”. <b>Polița nu se găurește și nu are listă de marcaje.</b> Găurile Ø5 mm se execută numai în fețele interioare ale lateralelor, câte două pe fiecare laterală: la 50 mm de față și la 50 mm de spate, cu centrul la 2 mm sub fața inferioară a poliței. Selectează o laterală și generează lista pentru a vedea cotele exacte ale găurilor.</div>`;
+  return;
+ }
+ const pts=[];
+ const divider=parts.find(q=>q.type==='divider');
+ const eps=2;
+ function jointLabel(edge){
+  const x=edge==='Stânga'?p.x:p.x+l;
+  if(Math.abs(x-cfg.t)<=eps)return 'LS';
+  if(Math.abs(x-(cfg.w-cfg.t))<=eps)return 'LD';
+  if(divider&&Math.abs(x-divider.x)<=eps)return `${displayName(divider)} — FAȚA ST`;
+  if(divider&&Math.abs(x-(divider.x+cfg.t))<=eps)return `${displayName(divider)} — FAȚA DR`;
+  return edge==='Stânga'?'Capăt stâng (verifică îmbinarea)':'Capăt drept (verifică îmbinarea)';
+ }
+ // Grupăm cele două cote ale șablonului pentru spate și față. Dacă adâncimea
+ // a fost redusă dintr-un capăt, prima cotă de pe acel capăt scade cu aceeași valoare.
+ const baseA=holeOffsets[0],baseB=holeOffsets[1],reduction=Math.max(0,Math.round(p.redD||0));
+ const backA=Math.max(0,baseA-(p.edge==='back'?reduction:0)),backB=baseB;
+ const frontA=Math.max(0,baseA-(p.edge==='front'?reduction:0)),frontB=baseB;
+ const distanceSummary=`Spate: ${backA} + ${backB}<br>Față: ${frontA} + ${frontB}`;
+ for(const edge of ['Stânga','Dreapta'])pts.push({joint:jointLabel(edge),edge,distances:distanceSummary,x:edge==='Stânga'?Math.round(p.x):Math.round(p.x+l)});
+ $('holeReportOut').innerHTML=`<div class="small" style="margin:8px 0"><b>${displayName(p)}</b> · Dimensiune finală ${Math.round(l)} × ${Math.round(d)} mm. Înălțimea centrului piesei: Z=${centerZ} mm față de baza dulapului. Lista identifică separat fiecare îmbinare: laterala exterioară sau fața DES. Distanțele sunt grupate în perechi pentru șablon: prima linie de la spate, a doua de la față. Dacă polița este redusă dintr-un capăt, prima cotă a perechii de pe acel capăt se ajustează cu valoarea reducerii (de exemplu, 50 devine 48 la o reducere de 2 mm).</div><table class="holetable"><thead><tr><th>Punct de îmbinare</th><th>Capăt poliță</th><th>Dist. șablon (mm)</th><th>X în dulap (mm)</th></tr></thead><tbody>${pts.map(q=>`<tr><td>${q.joint}</td><td>${q.edge}</td><td>${q.distances}</td><td>${q.x}</td></tr>`).join('')}</tbody></table><div class="small">Pentru „PO … ST”, capătul drept trebuie să indice fața stângă a IV; pentru „PO … DR”, capătul stâng trebuie să indice fața dreaptă a IV. Dacă apare „verifică îmbinarea”, geometria acelui capăt nu coincide cu o laterală sau fața DES.</div>`
+}
+function exportProject(){const data={app:'Atelier Mobilă prototype 0.1',units:'mm',cabinet:cfg,drawers:drawers.map(d=>({...d,railLength:railLength(),width:drawerWidth(d),innerWidth:drawerInnerWidth(d),frontWidth:drawerFrontWidth(d),frontX:drawerFrontX(d),pflLength:Math.max(0,railLength()-2),pflWidth:Math.max(0,drawerWidth(d)-2)})),parts:parts.map(p=>({...p,finalLength:dim(p,'l'),finalDepth:dim(p,'d')})),notes:'Prototype only. Verify hole transfer and jig compensation physically before manufacture.'};const jsonText=JSON.stringify(data,null,2);if(window.AndroidBridge&&typeof window.AndroidBridge.saveFile==='function'){window.AndroidBridge.saveFile('proiect-mobila.json','application/json',jsonText);return}const blob=new Blob([jsonText],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='proiect-mobila.json';a.click();URL.revokeObjectURL(a.href)}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function cutCode(p){
+ if(p.type==='side')return p.name==='Laterală stângă'?'LS':'LD';
+ if(p.type==='top')return 'TV';
+ if(p.type==='bottom')return 'FD';
+ if(p.type==='shelf')return 'PO';
+ if(p.type==='divider')return 'IV';
+ if(p.type==='drawerDivider')return 'IV-S';
+ if(p.type==='door'){const doors=parts.filter(q=>q.type==='door').sort((a,b)=>(a.doorIndex??0)-(b.doorIndex??0));if(doors.length===1)return 'U';const i=doors.findIndex(q=>q.id===p.id);if(i===0)return 'US';if(i===doors.length-1)return 'UD';return `U${i+1}`;}
+ if(p.type==='pfl')return 'SP';
+ if(p.type==='socle')return 'SO';
+ if(p.type==='drawerCap')return /^FI\s+\d+/i.test(p.name||'')?p.name:`FI ${Math.max(1,Number(p.compartment||0)+1)}`;
+ return String(p.name||p.type).toUpperCase();
+}
+function cutDims(p){
+ let length,width,thickness;
+ if(p.type==='door'){length=doorHeight(p);width=doorWidth(p);thickness=dim(p,'d');}
+ else if(p.type==='pfl'){length=p.z;width=p.l;thickness=p.d;}
+ else if(p.type==='socle'){length=p.l;width=p.h;thickness=p.d;}
+ else if(p.type==='side'||p.type==='divider'||p.type==='drawerDivider'){length=dim(p,'l');width=dim(p,'d');thickness=cfg.t;}
+ else {length=dim(p,'l');width=dim(p,'d');thickness=dim(p,'d')===3&&p.type==='pfl'?3:cfg.t;if(p.type==='pfl')thickness=p.d;}
+ return [Math.round(length),Math.round(width),Math.round(thickness)];
+}
+function cutPieceName(p){
+ if(p.type==='side')return p.name==='Laterală stângă'?'Laterală stânga dulap':'Laterală dreapta dulap';
+ if(p.type==='top')return 'Tavan dulap';
+ if(p.type==='bottom')return 'Fund dulap';
+ if(p.type==='shelf')return p.name||'Poliță';
+ if(p.type==='divider')return p.name||'Intermediar vertical';
+ if(p.type==='drawerDivider')return p.name||'Intermediar vertical sertare';
+ if(p.type==='door')return p.name||'Ușă';
+ if(p.type==='pfl')return 'PFL spate';
+ if(p.type==='socle')return 'Soclu';
+ if(p.type==='drawerCap')return p.name||'Fund intermediar peste sertare';
+ return p.name||p.type;
+}
+function cutlistRows(){
+ const rows=[];
+ const fiByDimensions=new Map();
+ const fiParts=parts.filter(p=>p.type==='drawerCap').sort((a,b)=>(Number(a.compartment)||0)-(Number(b.compartment)||0));
+ for(const p of fiParts){const [l,w,t]=cutDims(p),key=[l,w,t].join('|');if(!fiByDimensions.has(key))fiByDimensions.set(key,`FI ${fiByDimensions.size+1}`);}
+ for(const p of parts){const [l,w,t]=cutDims(p);let code=cutCode(p);if(p.type==='drawerCap')code=fiByDimensions.get([l,w,t].join('|'))||'FI 1';rows.push({code,name:cutPieceName(p),l,w,t,qty:1});}
+ drawers.forEach((d)=>{const L=Math.round(railLength()||0),H=Math.round(d.boxH),inner=Math.round(drawerInnerWidth(d)),frontH=Math.round(d.frontH),outerW=Math.round(drawerWidth(d));
+  rows.push({code:'LSS',name:'Laterală stânga sertar',l:L,w:H,t:cfg.t,qty:1});
+  rows.push({code:'LDS',name:'Laterală dreapta sertar',l:L,w:H,t:cfg.t,qty:1});
+  rows.push({code:'DFS',name:'Dublură față sertar',l:inner,w:H,t:cfg.t,qty:1});
+  rows.push({code:'DSS',name:'Dublură spate sertar',l:inner,w:H,t:cfg.t,qty:1});
+  rows.push({code:'PFL-S',name:'Fund sertar PFL',l:Math.max(0,L-2),w:Math.max(0,outerW-2),t:3,qty:1});
+  rows.push({code:'FS',name:'Front sertar',l:Math.round(drawerFrontWidth(d)),w:frontH,t:cfg.t,qty:1});
+ });
+ const grouped=new Map();
+ for(const r of rows){
+  // Numărul din denumire (Poliță 1, Poliță 2 etc.) identifică piesa în proiect,
+  // dar nu trebuie să împiedice gruparea pieselor identice în lista de debitare.
+  const k=[r.code,r.l,r.w,r.t].join('|');
+  if(grouped.has(k))grouped.get(k).qty+=r.qty;
+  else {
+   const baseName=String(r.name).replace(/\s+\d+$/,'').trim();
+   grouped.set(k,{...r,name:baseName});
+  }
+ }
+ return [...grouped.values()];
+}
+function printDimensionsHtml(){
+ const rows=cutlistRows().map(r=>`<tr><td>${esc(r.code)}</td><td>${esc(r.name)}</td><td>${r.l}</td><td>${r.w}</td><td>${r.t}</td><td>${r.qty}</td></tr>`).join('');
+ return `<h1>Atelier Mobilă — Lista de debitare</h1><p>Dulap: ${cfg.w} × ${cfg.h} × ${cfg.d} mm · Dimensiuni în mm</p><table><thead><tr><th>Cod</th><th>Piesă</th><th>Lungime (mm)</th><th>Lățime/înălțime (mm)</th><th>Grosime (mm)</th><th>Bucăți</th></tr></thead><tbody>${rows}</tbody></table><p class="note">Piesele de același tip și cu dimensiuni identice sunt grupate pe un singur rând, cu numărul de bucăți cumulat. Verifică orientarea, canturile și reducerile înainte de debitare.</p>`;
+}
+function exportCutlistCsv(){
+ // Export detaliat, în același format ca lista sertarelor: cod, denumirea piesei și trei dimensiuni.
+ const rows=[];
+ for(const p of parts){
+  const [l,w,t]=cutDims(p);let code=cutCode(p);
+  if(p.type==='drawerCap')code=cutCode(p);
+  let name='';
+  if(p.type==='side')name=p.name==='Laterală stângă'?'Laterală stânga dulap':'Laterală dreapta dulap';
+  else if(p.type==='top')name='Tavan dulap';
+  else if(p.type==='bottom')name='Fund dulap';
+  else if(p.type==='shelf')name=p.name||'Poliță';
+  else if(p.type==='divider')name=p.name||'Intermediar vertical';
+  else if(p.type==='drawerDivider')name=p.name||'Intermediar vertical sertare';
+  else if(p.type==='door')name=p.name||'Ușă';
+  else if(p.type==='pfl')name='PFL spate';
+  else if(p.type==='socle')name='Soclu';
+  else if(p.type==='drawerCap')name=p.name||'Fund intermediar peste sertare';
+  else name=p.name||p.type;
+  rows.push([code,name,l,w,t]);
+ }
+ drawers.forEach((d,i)=>{const n=i+1,L=Math.round(railLength()||0),H=Math.round(d.boxH),inner=Math.round(drawerInnerWidth(d)),frontH=Math.round(d.frontH),outerW=Math.round(drawerWidth(d));
+  rows.push([`S${n} LSS`,'Laterală stânga sertar',L,H,cfg.t]);
+  rows.push([`S${n} LDS`,'Laterală dreapta sertar',L,H,cfg.t]);
+  rows.push([`S${n} DFS`,'Dublură față sertar',inner,H,cfg.t]);
+  rows.push([`S${n} DSS`,'Dublură spate sertar',inner,H,cfg.t]);
+  rows.push([`S${n} PFL`,'Fund sertar PFL',Math.max(0,L-2),Math.max(0,outerW-2),3]);
+  rows.push([`S${n} Front`,'Front aplicat în compartiment',Math.round(drawerFrontWidth(d)),frontH,cfg.t]);
+ });
+ const lines=[['Cod','Piesă','Lungime (mm)','Lățime/înălțime (mm)','Grosime (mm)'],...rows];
+ const csv='\uFEFF'+lines.map(row=>row.map(v=>{const s=String(v??'');return /[;"\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(';')).join('\r\n');
+ if(window.AndroidBridge&&typeof window.AndroidBridge.saveFile==='function'){window.AndroidBridge.saveFile('lista-debitare.csv','text/csv;charset=utf-8',csv);return}const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='lista-debitare.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function collectDrillingPrint(){const oldSelected=selected,oldHtml=$('holeReportOut').innerHTML;let sections='';for(const p of parts){selected=p.id;holeReport();let report=$('holeReportOut').innerHTML.trim();if(!report)report='<p>Nu s-au generat marcaje pentru această piesă.</p>';sections+=`<section class="piece-sheet"><h1>Fișă de găurire — ${esc(displayName(p))}</h1><p>Dulap: ${cfg.w} × ${cfg.h} × ${cfg.d} mm · Placă: ${cfg.t} mm</p>${report}</section>`}selected=oldSelected;render();$('holeReportOut').innerHTML=oldHtml;return sections}
+function printProject(){const mode=$('printMode').value;const current=partById(selected);if(projectMode==='drawers'){if(mode==='selectedDrilling'||mode==='allDrilling'){alert('În modul „Dulap cu sertare”, fișele de găurire se generează numai pentru piesele dulapului; pentru lista completă a dimensiunilor alege „Doar lista dimensiunilor pieselor”.');return}let content=printDimensionsHtml()+printDrawerDimensionsHtml();if(mode==='both')content+=collectDrillingPrint();const win=window.open('','_blank');if(!win){alert('Browserul a blocat fereastra de tipărire. Permite ferestrele pop-up pentru acest fișier și încearcă din nou.');return}win.document.open();win.document.write(`<!doctype html><html lang=\"ro\"><head><meta charset=\"utf-8\"><title>Lista completă de piese — dulap cu sertare</title><style>body{font:12px Arial,sans-serif;color:#111;margin:14mm}h1{font-size:18px;margin:0 0 10px}table{width:100%;border-collapse:collapse;margin:10px 0;font-size:10px}th,td{border:1px solid #777;padding:5px;text-align:left}.note,.small{font-size:10px}@page{margin:12mm}.piece-sheet{page-break-before:always;break-before:page}</style></head><body>${content}<script>window.onload=()=>{window.focus();window.print()}<\/script></body></html>`);win.document.close();return}if(mode==='selectedDrilling'&&!current){alert('Selectează mai întâi piesa pentru care vrei fișa de găurire.');return}let content='';if(mode==='dimensions')content=printDimensionsHtml();else if(mode==='selectedDrilling'){const old=$('holeReportOut').innerHTML;holeReport();content=`<h1>Fișă de găurire — ${esc(displayName(current))}</h1><p>Dulap: ${cfg.w} × ${cfg.h} × ${cfg.d} mm · Placă: ${cfg.t} mm</p>${$('holeReportOut').innerHTML}`;$('holeReportOut').innerHTML=old}else if(mode==='allDrilling')content=collectDrillingPrint();else content=printDimensionsHtml()+collectDrillingPrint();const win=window.open('','_blank');if(!win){alert('Browserul a blocat fereastra de tipărire. Permite ferestrele pop-up pentru acest fișier și încearcă din nou.');return}win.document.open();win.document.write(`<!doctype html><html lang="ro"><head><meta charset="utf-8"><title>Fișe Atelier Mobilă</title><style>body{font:12px Arial,sans-serif;color:#111;margin:14mm}h1{font-size:18px;margin:0 0 10px}p{margin:5px 0 12px}.small,.note{font-size:10px;color:#333;line-height:1.35}.holetable,table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:10px}.holetable th,.holetable td,th,td{border:1px solid #777;padding:5px;text-align:left;vertical-align:top}.piece-sheet{page-break-before:always;break-before:page}.piece-sheet:first-child{page-break-before:auto;break-before:auto}.piece-sheet .small{margin:8px 0}.piece-sheet table{page-break-inside:auto}tr{page-break-inside:avoid}button{display:none}@page{size:auto;margin:12mm}@media screen{body{max-width:1000px;margin:24px auto}.piece-sheet{border-top:2px dashed #999;margin-top:30px;padding-top:20px}}</style></head><body>${content}<script>window.onload=()=>{window.focus();window.print()}<\/script></body></html>`);win.document.close()}
+// Instrucțiunile sunt ascunse inițial. Un buton dedicat le deschide/închide,
+// fără ca atingerea titlului secțiunii să declanșeze accidental acțiunea.
+document.querySelectorAll('.panel .section .small:not(.status):not(#noSelection)').forEach(el=>{
+ if(!el.closest('#holeReportOut')) el.classList.add('instruction');
+});
+document.querySelectorAll('.panel .section').forEach(section=>{
+ const heading=section.querySelector(':scope > h2');
+ if(!heading || !section.querySelector('.instruction')) return;
+ const toggle=document.createElement('button');
+ toggle.type='button';
+ toggle.className='instruction-toggle';
+ toggle.textContent='Instrucțiuni';
+ toggle.setAttribute('aria-expanded','false');
+ toggle.setAttribute('aria-label','Arată instrucțiunile pentru '+heading.textContent.trim());
+ heading.appendChild(toggle);
+ toggle.addEventListener('click',e=>{
+  e.stopPropagation();
+  const open=section.classList.toggle('instructions-open');
+  toggle.setAttribute('aria-expanded',String(open));
+  toggle.textContent=open?'Ascunde':'Instrucțiuni';
+  toggle.setAttribute('aria-label',(open?'Ascunde':'Arată')+' instrucțiunile pentru '+heading.firstChild.textContent.trim());
+ });
+});
+const stageInstructionsBtn=$('stageInstructionsBtn');stageInstructionsBtn.onclick=()=>{const stage=document.querySelector('.stage');if(!stage)return;const open=stage.classList.toggle('instructions-open');stageInstructionsBtn.textContent=open?'Ascunde instrucțiunile':'Instrucțiuni';stageInstructionsBtn.setAttribute('aria-expanded',String(open));};const footerInstructionsBtn=$('footerInstructionsBtn');footerInstructionsBtn.onclick=()=>{const el=$('footerInstruction');const open=el.style.display!=='block';el.style.display=open?'block':'none';footerInstructionsBtn.textContent=open?'Ascunde instrucțiunile':'Instrucțiuni';footerInstructionsBtn.setAttribute('aria-expanded',String(open));};
+// Păstrează dimensiunile dulapului înaintea setărilor de sertare în panoul lateral.
+const drawerPanelEl=$('drawerModePanel'),cabinetDimsEl=document.querySelector('.panel > .section');if(drawerPanelEl&&cabinetDimsEl)cabinetDimsEl.parentNode.insertBefore(cabinetDimsEl,drawerPanelEl);
+let projectMode='drawers';function setProjectMode(mode='drawers'){projectMode='drawers';document.querySelectorAll('.panel > .section').forEach(sec=>{sec.style.display=''});['selectedDrilling','allDrilling','both'].forEach(v=>{const o=$('printMode').querySelector(`option[value="${v}"]`);if(o)o.disabled=v!=='both'});if(['selectedDrilling','allDrilling'].includes($('printMode').value))$('printMode').value='dimensions';$('drawerModePanel').classList.add('visible');$('projectTitle').textContent='Dulap cu sertare · vedere 3D';renderDrawerUI();renderSvg()}
+$('addDrawer').onclick=addDrawer;$('addDrawerEachCompartment').onclick=addDrawerEachCompartment;$('drawerCompartment').onchange=()=>{const v=Number($('drawerCompartment').value);drawerCompartmentSelected=Number.isFinite(v)?v:0;renderDrawerUI()};$('removeDrawer').onclick=()=>{if(drawers.length){const d=drawers.pop();if(d.id===selectedDrawerId)selectedDrawerId=drawers[drawers.length-1]?.id??null;syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();render()}};
+$('applyDrawer').onclick=applySelectedDrawer;$('drawerZ').addEventListener('keydown',e=>{if(e.key==='Enter')applySelectedDrawer()});$('drawerFrontTransparent').onchange=()=>renderSvg();$('drawerInstructionsBtn').onclick=()=>{const panel=$('drawerModePanel'),open=!panel.classList.contains('instructions-open');panel.classList.toggle('instructions-open',open);$('drawerInstructionsBtn').setAttribute('aria-expanded',String(open));$('drawerInstructionsBtn').textContent=open?'Ascunde instrucțiunile':'Instrucțiuni'};$('deleteDrawer').onclick=()=>{drawers=drawers.filter(d=>d.id!==selectedDrawerId);selectedDrawerId=drawers[drawers.length-1]?.id??null;recalcDrawerChain(0);syncDrawerCap();if(drawerCapNeeded())distributeUpperShelves();render()};
+$('railType').addEventListener('change',()=>{const opt=$('railType').selectedOptions[0];const value=Number(opt?.dataset.clearance);if(Number.isFinite(value))$('drawerClearance').value=value;drawerCfg.railType=$('railType').value;drawerCfg.clearance=Math.max(0,Number($('drawerClearance').value)||0);renderDrawerUI();renderSvg()});
+['drawerClearance','drawerBoxH','drawerGap','railOffset'].forEach(id=>$(id).addEventListener('change',()=>{drawerCfg.clearance=Math.max(0,Number($('drawerClearance').value)||0);drawerCfg.boxH=Math.max(40,Number($('drawerBoxH').value)||100);drawerCfg.gap=Math.max(0,Number($('drawerGap').value)||0);drawerCfg.railOffset=Math.max(0,Number($('railOffset').value)||0);renderDrawerUI();renderSvg()}));
+
+$('printBtn').onclick=printProject;
+$('applyHoleOffsets').onclick=applyHoleOffsets;$('shelfMetalSupports').onchange=e=>{const p=partById(selected);if(p&&p.type==='shelf'){p.supportMode=e.target.checked?'metal':'joinery';render();holeReport()}};$('topMode').onchange=setStructureModes;$('bottomMode').onchange=setStructureModes;$('applyCab').onclick=applyCab;$('addShelf').onclick=()=>addShelf();$('addDivider').onclick=addDivider;$('addDoor').onclick=addDoor;$('addDoubleDoors').onclick=addDoubleDoors;$('addTripleDoors').onclick=addTripleDoors;$('addPfl').onclick=addPfl;$('applyHinges').onclick=applyHingeSettings;$('hingeEdge').onchange=applyHingeSettings;$('hingeCount').onchange=applyHingeSettings;$('applyPart').onclick=applyPart;$('deletePart').onclick=deletePart;$('showHoles').onchange=e=>{showHoles=e.target.checked;render()};$('holesBtn').onclick=()=>{showHoles=!showHoles;render()};$('holeReport').onclick=()=>{try{const p=partById(selected);if(!p){const side=parts.find(q=>q.type==='side');if(side)selected=side.id;}showHoles=true;render();holeReport();const out=$('holeReportOut');if(!out.innerHTML.trim())out.innerHTML='<div class="small">Nu s-au generat marcaje. Selectează o laterală, poliță, tavan, fund sau ușă și încearcă din nou.</div>';}catch(err){$('holeReportOut').innerHTML='<div class="small">Eroare la generarea listei: '+esc(err&&err.message?err.message:String(err))+'</div>';console.error(err);}};$('exportBtn').onclick=exportProject;$('exportCutlistBtn').onclick=exportCutlistCsv;$('zoomIn').onclick=()=>{viewZoom=Math.min(3.5,+(viewZoom+0.25).toFixed(2));renderSvg();$('zoomLabel').textContent=Math.round(viewZoom*100)+'%'};$('zoomOut').onclick=()=>{viewZoom=Math.max(1,+(viewZoom-0.25).toFixed(2));renderSvg();$('zoomLabel').textContent=Math.round(viewZoom*100)+'%'};$('resetView').onclick=()=>{viewZoom=1;viewPanX=0;viewPanY=0;renderSvg();$('zoomLabel').textContent='100%'};$('equalShelves').onclick=()=>{setShelfCount($('shelfN').value,true);selected=parts.find(p=>p.type==='shelf')?.id??selected;render()};$('equalDividers').onclick=distributeDividersEqually;$('repeatShelves').onclick=()=>{let s=parts.filter(p=>p.type==='shelf').sort((a,b)=>a.z-b.z);if(!s.length){addShelf();return}const low=drawers.length?upperCompartmentBase():cfg.t;s.forEach((p,i)=>p.z=low+300*(i+1));selected=s[0].id;render()};
+init();setProjectMode('drawers');
+</script></body></html>
